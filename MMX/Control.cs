@@ -46,7 +46,7 @@ namespace MMXOnline
         public const string TeamChat = "menuteamchat";
         public const string AllChat = "menuallchat";
         public const string Taunt = "taunt";
-        public const string SigmaCommand = "sigmacommand";
+        public const string Special2 = "command";
 
         public static JoystickInfo joystick;
 
@@ -264,6 +264,7 @@ namespace MMXOnline
                                     { TeamChat, (int)Key.T },
                                     { AllChat, (int)Key.Y },
                                     { Taunt, (int)Key.G },
+                                    { Special2, (int)Key. V },
                                }
                             },
                             // Sigma specific controls
@@ -271,7 +272,7 @@ namespace MMXOnline
                                getCharSpecificName(KeyboardName, 4, 0),
                                new Dictionary<string, int?>()
                                {
-                                    { SigmaCommand, (int)Key.LControl },
+                                    { Special2, (int)Key.LControl },
                                }
                             },
                             // Axl directional aim controls

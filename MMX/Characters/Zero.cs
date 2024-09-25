@@ -23,7 +23,7 @@ namespace MMXOnline
         public float maxZSaberShotCooldown = 0.33f;
         public float knuckleSoundCooldown;
 
-        public float maxHyperZeroTime = 12;
+        public float maxHyperZeroTime = 14;
         public float blackZeroTime;
         public float awakenedZeroTime;
         public bool hyperZeroUsed;
@@ -34,7 +34,7 @@ namespace MMXOnline
         public float zero3SwingComboStartTime;
         public float zero3SwingComboEndTime;
         public float hyorogaCooldown = 0;
-        public const float maxHyorogaCooldown = 1f;
+        public const float maxHyorogaCooldown = 0.75f;
         public float zeroLemonCooldown;
         public bool doubleBusterDone;
 
@@ -166,6 +166,33 @@ namespace MMXOnline
             chargeLogic();
 
             Helpers.decrementTime(ref zeroLemonCooldown);
+
+            // Handles Standard Hypermode Activations.
+		if (player.scrap >= Player.zeroHyperCost &&
+			player.input.isHeld(Control.Special2, player) &&
+			charState is not HyperZeroStart && (
+				!isNightmareZero &&
+				!isAwakenedZero() &&
+				!isBlackZero() &&
+				!isBlackZero2()
+			) && !(charState is WarpIn)
+		) {
+			if (!player.isZBusterZero()) {
+				hyperProgress += Global.spf;
+			}
+		} else {
+			hyperProgress = 0;
+		}
+		if (hyperProgress >= 1 && player.scrap >= Player.zeroHyperCost) {
+			hyperProgress = 0;
+			changeState(new HyperZeroStart(player.zeroHyperMode), true);
+		}
+		if (player.scrap < Player.zeroHyperCost && player.input.isHeld(Control.Special2, player)) {
+			Global.level.gameMode.setHUDErrorMessage(
+				player, Player.zeroHyperCost + " scrap needed to enter hypermode.",
+				playSound: false, resetCooldown: true
+			);
+		}
             if (player.isZBusterZero())
             {
                 if (charState.canShoot() && !isCharging())
@@ -223,23 +250,30 @@ namespace MMXOnline
                     }
                 }
 
-                if (player.input.isWeaponLeftOrRightHeld(player) && player.scrap >= 10 && !isBlackZero2() && charState is not HyperZeroStart && invulnTime == 0 && rideChaser == null && rideArmor == null && charState is not WarpIn)
-                {
-                    hyperProgress += Global.spf;
-                }
-                else
-                {
-                    hyperProgress = 0;
-                }
+                // Handles ZBusterZero's Hyper activations.
+			if (player.input.isHeld(Control.Special2, player) && 
+				player.scrap >= Player.zBusterZeroHyperCost && !isBlackZero2() && 
+				charState is not HyperZeroStart && invulnTime == 0 && 
+				rideChaser == null && rideArmor == null && charState is not WarpIn) {
+				hyperProgress += Global.spf;
+			} else {
+				hyperProgress = 0;
+			}
 
-                if (hyperProgress >= 1 && player.scrap >= 10 && !isBlackZero2())
-                {
-                    hyperProgress = 0;
-                    changeState(new HyperZeroStart(0), true);
-                }
+			if (hyperProgress >= 1 && player.scrap >= Player.zBusterZeroHyperCost && 
+				!isBlackZero2()) {
+				hyperProgress = 0;
+				changeState(new HyperZeroStart(0), true);
+			}
 
-                return;
-            }
+			if (player.scrap < Player.zBusterZeroHyperCost && player.input.isHeld(Control.Special2, player)) {
+				Global.level.gameMode.setHUDErrorMessage(
+					player, Player.zBusterZeroHyperCost + " scrap needed to enter hypermode.",
+					playSound: false, resetCooldown: true
+				);
+			}
+			return;
+		}
 
             // Cutoff point for non-zero buster loadouts
 
@@ -289,7 +323,7 @@ namespace MMXOnline
                 {
                     if (genmuCooldown == 0 && xSaberCooldown < 0.5f)
                     {
-                        genmuCooldown = 2;
+                        genmuCooldown = 3;
                         changeState(new GenmuState(), true);
                     }
                     return;
@@ -583,7 +617,7 @@ namespace MMXOnline
                 //float overrideDamage = sprite.time > 0.1f ? 2 : 1;
                 proj = new GenericMeleeProj(new RisingWeapon(player), centerPoint, ProjIds.Rising, player, 1, 0, 0.15f);
             }
-            else if (sprite.name.Contains("hyouretsuzan")) proj = new GenericMeleeProj(new HyouretsuzanWeapon(player), centerPoint, ProjIds.Hyouretsuzan2, player, 4, 12, 0.5f);
+            else if (sprite.name.Contains("hyouretsuzan")) proj = new GenericMeleeProj(new HyouretsuzanWeapon(player), centerPoint, ProjIds.Hyouretsuzan2, player, 3, 12, 0.5f);
             else if (sprite.name.Contains("rakukojin"))
             {
                 float damage = 3 + Helpers.clamp(MathF.Floor(deltaPos.y * 0.8f), 0, 10);
@@ -890,7 +924,7 @@ namespace MMXOnline
         public override void onEnter(CharState oldState)
         {
             base.onEnter(oldState);
-            if (!character.hyperZeroUsed)
+            if (character is Character zero && !zero.hyperZeroUsed)
             {
                 if (player.isZBusterZero())
                 {
@@ -929,6 +963,7 @@ namespace MMXOnline
             {
                 character.invulnTime = 0.5f;
             }
+            
         }
 
         public override void render(float x, float y)

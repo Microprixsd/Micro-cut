@@ -298,7 +298,10 @@ namespace MMXOnline
                     onMechSlotSelect(mmw);
                     return;
                 }
-            }
+            } else if (player.input.isPressed(Control.Special2, player) && !player.input.isHeld(Control.Down, player)) {
+			onMechSlotSelect(mmw);
+			return;
+		}
             else if (mmw != null)
             {
                 if (player.input.isPressed(Control.Up, player))

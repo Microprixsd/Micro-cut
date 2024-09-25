@@ -1370,6 +1370,7 @@ namespace MMXOnline
             if (weapon is UndisguiseWeapon) return false;
             if (weapon is NovaStrike && level.isHyper1v1()) return false;
             if (weapon is Buster buster) return false;
+            if (weapon is NovaStrike) return false;
 
             return true;
         }

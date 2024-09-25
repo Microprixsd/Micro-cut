@@ -57,6 +57,7 @@ namespace MMXOnline
                 new string[] { Control.Special1, "Special" },
                 new string[] { Control.WeaponLeft, "WeaponL" },
                 new string[] { Control.WeaponRight, "WeaponR" },
+                new string[] { Control.Special2, "Command" },
             };
 
             // General menu controls not to be overridden on characters
@@ -78,7 +79,7 @@ namespace MMXOnline
 
             if (charNum == 4)
             {
-                bindableControls.Add(new string[] { Control.SigmaCommand, "Command Button" });
+                bindableControls.Add(new string[] { Control.Special2, "Command Button" });
             }
 
             // Axl specific settings
@@ -195,8 +196,8 @@ namespace MMXOnline
                     if (inputName.StartsWith("menu", StringComparison.OrdinalIgnoreCase)) continue;
                     if (kvp.Key.StartsWith("aim", StringComparison.OrdinalIgnoreCase)) continue;
                     if (inputName.StartsWith("aim", StringComparison.OrdinalIgnoreCase)) continue;
-                    if (kvp.Key.StartsWith("sigmacommand", StringComparison.OrdinalIgnoreCase)) continue;
-                    if (inputName.StartsWith("sigmacommand", StringComparison.OrdinalIgnoreCase)) continue;
+                    if (kvp.Key.StartsWith("command", StringComparison.OrdinalIgnoreCase)) continue;
+                    if (inputName.StartsWith("command", StringComparison.OrdinalIgnoreCase)) continue;
                     // Jump and up are the only only other exceptions to the "can't bind multiple with one key" rule
                     if ((kvp.Key == Control.Jump && inputName == Control.Up) || kvp.Key == Control.Up && inputName == Control.Jump) continue;
 

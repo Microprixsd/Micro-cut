@@ -81,7 +81,7 @@ namespace MMXOnline
             }
             //Stop the dash speed on transition to any frame except jump/fall (dash lingers in air) or dash itself
             if (!(newState is Jump) && !(newState is Fall) && !(newState is WallKick) && !(newState is Dash) && !(newState is X2ChargeShot) && !(newState is VulcanCharState) && !(newState is StrikeChainPullToWall)
-                && !(newState is SigmaSlashState) && !(newState is SigmaClawState) && !(newState is SigmaWallDashState) && !(newState is X6SaberState) && !(newState is Sigma3ShootAir) && !(newState is XUPPunchState) && !(newState is VileHover))
+                && !(newState is SigmaSlashState) && !(newState is NovaStrikeState)&& !(newState is SigmaClawState) && !(newState is SigmaWallDashState) && !(newState is X6SaberState) && !(newState is Sigma3ShootAir) && !(newState is XUPPunchState) && !(newState is VileHover))
             {
                 if (character.isDashing && newState is AirDash) character.dashedInAir++;
                 if (character.isDashing && newState is UpDash) character.dashedInAir++;

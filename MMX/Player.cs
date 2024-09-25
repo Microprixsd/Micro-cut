@@ -129,6 +129,10 @@ namespace MMXOnline
         public bool lastDeathWasSigmaHyper;
         public bool lastDeathWasXHyper;
         public const int reviveVileScrapCost = 5;
+        public const int zeroHyperCost = 10;
+        public const int zBusterZeroHyperCost = 5;
+        public const int goldenArmorCost = 5;
+        public const int ultimateArmorCost = 10;
         public const int reviveSigmaScrapCost = 10;
         public const int reviveXScrapCost = 10;
         public bool lastDeathCanRevive;
@@ -885,7 +889,7 @@ namespace MMXOnline
                     {
                         reviveVile(false);
                     }
-                    else if (input.isPressed(Control.Shoot, this) && !lastDeathWasVileMK2)
+                    else if (input.isPressed(Control.Special2, this) && !lastDeathWasVileMK2)
                     {
                         reviveVile(true);
                     }
@@ -945,7 +949,7 @@ namespace MMXOnline
             }
             else if (isX)
             {
-                if (canReviveX() && (input.isPressed(Control.Special1, this) || Global.shouldAiAutoRevive))
+                if (canReviveX() && (input.isPressed(Control.Special2, this) || Global.shouldAiAutoRevive))
                 {
                     reviveX();
                 }

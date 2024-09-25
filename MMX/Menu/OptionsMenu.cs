@@ -939,7 +939,6 @@ namespace MMXOnline
 
         public static void inferPresetQuality(uint textureSize)
         {
-            string presetMessage = "Based on your detected video card texture size of {0}, a Graphics setting of {1} has been automatically selected.\n\nYou can change this in the Settings menu.";
             if (textureSize <= 1024)
             {
                 setPresetQuality(0);

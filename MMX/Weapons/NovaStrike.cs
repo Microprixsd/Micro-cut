@@ -8,16 +8,17 @@ namespace MMXOnline
 {
     public class NovaStrike : Weapon
     {
-        public const float ammoUsage = 16;
+        public const float ammoUsage = 0;
         public NovaStrike(Player player) : base()
         {
             damager = new Damager(player, 4, Global.defFlinch, 0.5f);
-            rateOfFire = 1.5f;
+            rateOfFire = 3.5f;
             index = (int)WeaponIds.NovaStrike;
             weaponBarBaseIndex = 42;
             weaponBarIndex = 36;
             weaponSlotIndex = 95;
             killFeedIndex = 104;
+            switchCooldown = 0.25f;
             ammo = 32;
         }
 
@@ -48,12 +49,13 @@ namespace MMXOnline
     {
         int leftOrRight;
         int upOrDown;
+
         public NovaStrikeState() : base("nova_strike_start", "", "", "")
         {
             superArmor = true;
             immuneToWind = true;
             invincible = true;
-        }
+            }
 
         public override void update()
         {
@@ -86,18 +88,18 @@ namespace MMXOnline
             
             if (!character.tryMove(new Point(character.xDir * 350 * leftOrRight, 350 * upOrDown), out _))
             {
-                player.character.changeState(new Idle(), true);
+                character.changeToIdleOrFall();
                 return;
             }
 
             if (character.flag != null)
             {
-                player.character.changeState(new Idle(), true);
+                character.changeToIdleOrFall();
                 return;
             }
             if (stateTime > 0.6f)
             {
-                player.character.changeState(new Idle(), true);
+                character.changeToIdleOrFall();
                 return;
             }
         }
@@ -115,6 +117,7 @@ namespace MMXOnline
             base.onExit(newState);
             player.character.yDir = 1;
             player.character.useGravity = true;
+            character.dashedInAir = 2;
         }
     }
 }

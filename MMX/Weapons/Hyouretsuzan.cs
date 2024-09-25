@@ -18,7 +18,7 @@ namespace MMXOnline
     {
         public HyouretsuzanWeapon(Player player) : base()
         {
-            damager = new Damager(player, 4, 12, 0.5f);
+            damager = new Damager(player, 3, 12, 0.5f);
             index = (int)WeaponIds.Hyouretsuzan;
             rateOfFire = 0;
             weaponBarBaseIndex = 24;

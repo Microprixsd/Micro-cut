@@ -186,7 +186,7 @@ namespace MMXOnline
             }
             else if (stateTime > 0.6f)
             {
-                character.changeState(new Idle(), true);
+                character.changeToIdleOrFall();
                 return;
             }
 

@@ -47,7 +47,6 @@ namespace MMXOnline
             }
         }
 
-        float state1Time;
         public void update()
         {
             if (state == 0)

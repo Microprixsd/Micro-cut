@@ -178,6 +178,7 @@ namespace MMXOnline
                     player.changeWeaponSlot(oldSlot);
                 }
             }
+            quickArmorUpgrade();
 
             if (charState is not Die && player.input.isPressed(Control.Special1, player) && player.hasAllX3Armor() && !player.hasGoldenArmor() && !player.hasUltimateArmor() && player.hasAnyChip())
             {
@@ -764,6 +765,43 @@ namespace MMXOnline
                 Global.serverClient?.rpc(shootRpc, playerIdByte, xBytes[0], xBytes[1], yBytes[0], yBytes[1], xDirByte, chargeLevelByte, netProjIdBytes[0], netProjIdBytes[1], weaponIndexByte);
             }
         }
+
+    	// Fast upgrading via command key.
+	public void quickArmorUpgrade() {
+		if (!player.input.isHeld(Control.Special2, player)) {
+			hyperProgress = 0;
+			return;
+		}
+		if (player.health <= 0) {
+			hyperProgress = 0;
+			return;
+		}
+		if (!(charState is WarpIn) && (player.canUpgradeGoldenX() || player.canUpgradeUltimateX())) {
+			hyperProgress += Global.spf;
+		}
+		if (hyperProgress < 1) {
+			return;
+		}
+		hyperProgress = 0;
+		if (player.canUpgradeGoldenX()) {
+			if (!player.character.boughtGoldenArmorOnce) {
+				player.scrap -= Player.goldenArmorCost;
+				player.character.boughtGoldenArmorOnce = true;
+			}
+			player.setGoldenArmor(true);
+			Global.playSound("ching");
+			return;
+		}
+		if (player.canUpgradeUltimateX()) {
+			if (!player.character.boughtUltimateArmorOnce) {
+				player.scrap -= Player.ultimateArmorCost;
+				player.character.boughtUltimateArmorOnce = true;
+			}
+			player.setUltimateArmor(true);
+			Global.playSound("ching");
+			return;
+		}
+	}
 
         public bool canScan()
         {

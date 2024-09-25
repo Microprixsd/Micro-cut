@@ -64,7 +64,7 @@ namespace MMXOnline
         public bool insideCharacter;
         public float invulnTime = 0;
         public float parryCooldown;
-        public float maxParryCooldown = 0.5f;
+        public float maxParryCooldown = 0.25f;
 
         public bool stockedCharge;
         public void stockCharge(bool stockOrUnstock)
