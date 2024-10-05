@@ -1300,7 +1300,7 @@ namespace MMXOnline
             }
             var move = new Point(0, 0);
             if (player.isX && player.hasBootsArmor(1)) modifier = 1.15f;
-            if (player.character.sprite.name.EndsWith("unpo_grab_dash")) modifier = 1.25f;
+            if (player.character.sprite.name.EndsWith("unpo_grab_dash")) modifier = 1.3f;
             move.x = character.getRunSpeed() * character.getDashSpeed() * initialDashDir * modifier;
             character.move(move);
             if (stateTime > 0.1)
@@ -1338,7 +1338,7 @@ namespace MMXOnline
 
             float modifier = 1;
             if (player.isX && player.hasBootsArmor(2)) modifier = 1.15f;
-            if (player.character.sprite.name.EndsWith("unpo_grab_dash")) modifier = 1.25f;
+            if (player.character.sprite.name.EndsWith("unpo_grab_dash")) modifier = 1.3f;
             dashTime += Global.spf;
             if (dashTime > 0.6 * modifier)
             {

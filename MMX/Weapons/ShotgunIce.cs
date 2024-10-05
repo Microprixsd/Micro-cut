@@ -31,7 +31,7 @@ namespace MMXOnline
                 pos = pos.addxy(xDir * 25, 0);
                 pos.y = player.character.pos.y;
 
-                player.character.shotgunIceChargeTime = 1.5f;
+                player.character.shotgunIceChargeTime = 1.2f;
 
                 /*
                 var rect = new Rect(pos.x - 20, pos.y - 16, pos.x + 20, pos.y);

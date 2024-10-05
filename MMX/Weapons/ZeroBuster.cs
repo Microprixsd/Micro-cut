@@ -47,7 +47,7 @@ namespace MMXOnline
     {
         public Actor target;
         public ShingetsurinProj(Weapon weapon, Point pos, int xDir, float startTime, Player player, ushort netProjId, bool rpc = false) :
-            base(weapon, pos, xDir, 150, 2, player, "shingetsurin_proj", Global.defFlinch, 0.5f, netProjId, player.ownedByLocalPlayer)
+            base(weapon, pos, xDir, 200, 2, player, "shingetsurin_proj", Global.defFlinch, 1, netProjId, player.ownedByLocalPlayer)
         {
             maxTime = 3f;
             destroyOnHit = false;
@@ -65,11 +65,11 @@ namespace MMXOnline
         {
             base.update();
 
-            if (time >= 1 && time < 2)
+            if (time >= 1 && time < 1.2)
             {
                 vel = new Point();
             }
-            else if (time >= 2)
+            else if (time >= 1.7)
             {
                 if (target == null)
                 {
@@ -86,7 +86,7 @@ namespace MMXOnline
     public class ZBuster2Proj : Projectile
     {
         public ZBuster2Proj(Weapon weapon, Point pos, int xDir, int type, Player player, ushort netProjId, bool rpc = false) :
-            base(weapon, pos, xDir, 350, 2, player, "zbuster2", Global.defFlinch, 0, netProjId, player.ownedByLocalPlayer)
+            base(weapon, pos, xDir, 350, 2, player, "zbuster2", Global.halfFlinch, 0, netProjId, player.ownedByLocalPlayer)
         {
             fadeSprite = "buster2_fade";
             reflectable = true;
@@ -124,7 +124,7 @@ namespace MMXOnline
     public class ZBuster3Proj : Projectile
     {
         public ZBuster3Proj(Weapon weapon, Point pos, int xDir, int type, Player player, ushort netProjId, bool rpc = false) :
-            base(weapon, pos, xDir, 350, 4, player, "zbuster3", Global.defFlinch, 0, netProjId, player.ownedByLocalPlayer)
+            base(weapon, pos, xDir, 350, 3, player, "zbuster3", Global.defFlinch, 0, netProjId, player.ownedByLocalPlayer)
         {
             fadeSprite = "buster3_fade";
             reflectable = true;
@@ -151,7 +151,7 @@ namespace MMXOnline
     {
         float partTime;
         public ZBuster4Proj(Weapon weapon, Point pos, int xDir, int type, Player player, ushort netProjId, bool rpc = false) :
-            base(weapon, pos, xDir, 350, 6, player, "zbuster4", Global.defFlinch, 0, netProjId, player.ownedByLocalPlayer)
+            base(weapon, pos, xDir, 350, 4, player, "zbuster4", Global.defFlinch, 0, netProjId, player.ownedByLocalPlayer)
         {
             fadeSprite = "buster4_fade";
             reflectable = true;

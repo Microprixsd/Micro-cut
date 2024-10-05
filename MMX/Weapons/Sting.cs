@@ -28,7 +28,7 @@ namespace MMXOnline
             }
             else
             {
-                player.character.stingChargeTime = 8;
+                player.character.stingChargeTime = 4;
             }
         }
     }

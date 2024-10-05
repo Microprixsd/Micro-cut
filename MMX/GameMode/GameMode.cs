@@ -691,16 +691,6 @@ namespace MMXOnline
                     Helpers.drawTextStd(TCat.HUD, "x" + Global.level.mainPlayer.scrap.ToString(), 17, 140, Alignment.Left, fontSize: 24);
                 }
 
-                if (mainPlayer.character != null && mainPlayer.character.unpoShotCount > 0)
-                {
-                    int x = 10, y = 156;
-                    int count = mainPlayer.character.unpoShotCount;
-                    if (count >= 1) Global.sprites["hud_killfeed_weapon"].drawToHUD(180, x, y);
-                    if (count >= 2) Global.sprites["hud_killfeed_weapon"].drawToHUD(180, x + 13, y);
-                    if (count >= 3) Global.sprites["hud_killfeed_weapon"].drawToHUD(180, x, y + 11);
-                    if (count >= 4) Global.sprites["hud_killfeed_weapon"].drawToHUD(180, x + 13, y + 11);
-                }
-
                 if (level.mainPlayer.weapons.Count > 1)
                 {
                     drawWeaponSwitchHUD();
@@ -1310,13 +1300,6 @@ namespace MMXOnline
                 {
                     int barIndex = 0;
                     bool isHyperX = player.character?.isHyperX == true || player.character?.charState is XRevive;
-                    if (isHyperX)
-                    {
-                        if (player.character.unpoDamageMaxCooldown >= 2) barIndex = 1;
-                        else if (player.character.unpoDamageMaxCooldown >= 1) barIndex = 3;
-                        else if (player.character.unpoDamageMaxCooldown >= 0.5f) barIndex = 4;
-                        else barIndex = 5;
-                    }
                     Global.sprites["hud_health_full"].drawToHUD(barIndex, baseX, baseY);
                 }
                 else
@@ -2844,7 +2827,7 @@ namespace MMXOnline
         {
             if (level.mainPlayer.character != null && level.mainPlayer.readyTextOver && level.mainPlayer.canReviveX())
             {
-                Helpers.drawTextStd(TCat.HUD, Helpers.controlText("[D]: Activate Unlimited Potential"), Global.screenW / 2, 10 + Global.screenH / 2, Alignment.Center, fontSize: 21);
+                Helpers.drawTextStd(TCat.HUD, Helpers.controlText("[CMD]: Activate Unlimited Potential"), Global.screenW / 2, 10 + Global.screenH / 2, Alignment.Center, fontSize: 21);
             }
 
             if (level.mainPlayer.randomTip == null) return;
@@ -2873,7 +2856,7 @@ namespace MMXOnline
                         Helpers.drawTextStd(TCat.HUD, respawnStr, Global.screenW / 2, -10 + Global.screenH / 2, Alignment.Center);
                         string reviveText = Helpers.controlText("[D]: Revive as MK-II (5 scrap)");
                         Helpers.drawTextStd(TCat.HUD, reviveText, Global.screenW / 2, 10 + Global.screenH / 2, Alignment.Center, fontSize: 24);
-                        string reviveText2 = Helpers.controlText("[C]: Revive as MK-V (5 scrap)");
+                        string reviveText2 = Helpers.controlText("[CMD]: Revive as MK-V (5 scrap)");
                         Helpers.drawTextStd(TCat.HUD, reviveText2, Global.screenW / 2, 22 + Global.screenH / 2, Alignment.Center, fontSize: 24);
                     }
                 }

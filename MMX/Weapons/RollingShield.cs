@@ -145,7 +145,7 @@ namespace MMXOnline
         public override void onHitDamagable(IDamagable damagable)
         {
             base.onHitDamagable(character);
-            decAmmo(1);
+            decAmmo(0.75f);
         }
 
         public void decAmmo(float amount = 1)

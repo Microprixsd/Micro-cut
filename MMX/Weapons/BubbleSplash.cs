@@ -15,7 +15,7 @@ namespace MMXOnline
         public BubbleSplash() : base()
         {
             shootSounds = new List<string>() { "bubbleSplash", "bubbleSplash", "bubbleSplash", "bubbleSplashCharged" };
-            rateOfFire = 0.1f;
+            rateOfFire = 0.125f;
             isStream = true;
             index = (int)WeaponIds.BubbleSplash;
             weaponBarBaseIndex = 10;
@@ -23,8 +23,8 @@ namespace MMXOnline
             weaponSlotIndex = 10;
             killFeedIndex = 21;
             weaknessIndex = 12;
-            maxStreams = 7;
-            streamCooldown = 1;
+            maxStreams = 8;
+            streamCooldown = 0;
             switchCooldown = 0.25f;
         }
 
@@ -36,7 +36,7 @@ namespace MMXOnline
             }
             else
             {
-                return 0.5f;// return Global.spf * 10;
+                return 0.4f;// return Global.spf * 10;
             }
         }
 

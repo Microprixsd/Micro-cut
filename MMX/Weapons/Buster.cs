@@ -13,7 +13,7 @@ namespace MMXOnline
         public void setUnpoBuster()
         {
             isUnpoBuster = true;
-            rateOfFire = 0.75f;
+            rateOfFire = 1f;
             weaponBarBaseIndex = 70;
             weaponBarIndex = 59;
             weaponSlotIndex = 121;
@@ -68,11 +68,22 @@ namespace MMXOnline
             if (chargeLevel >= 3) shootSound = "buster4";
 
             bool hasUltArmor = player.character.hasUltimateArmorBS.getValue();
-            if (player.character?.isHyperX == true && chargeLevel > 0)
+            if (player.character?.isHyperX == true)
             {
-                new BusterUnpoProj(this, pos, xDir, player, netProjId);
-                new Anim(pos, "buster_unpo_muzzle", xDir, null, true);
-                shootSound = "buster2";
+                if (player.input.isHeld("up", player))
+			{
+				player.character.changeState(new XUPUpShot(), forceChange: true);
+				return;
+			}
+			if (player.input.isHeld("down", player) && !player.character.grounded)
+			{
+				player.character.changeState(new XUPDownShot(), forceChange: true);
+				return;
+			}
+			new BusterUnpoProj(this, pos, xDir, player, netProjId);
+			new Anim(pos, "buster_unpo_muzzle", xDir, null, destroyOnEnd: true);
+			shootSound = "buster2";
+            
             }
             else if (player.character.stockedCharge)
             {
@@ -169,7 +180,7 @@ namespace MMXOnline
     public class BusterUnpoProj : Projectile
     {
         public BusterUnpoProj(Weapon weapon, Point pos, int xDir, Player player, ushort netProjId) : 
-            base(weapon, pos, xDir, 350, 3, player, "buster_unpo", Global.defFlinch, 0.01f, netProjId, player.ownedByLocalPlayer)
+            base(weapon, pos, xDir, 350, 4, player, "buster_unpo", Global.defFlinch, 0.01f, netProjId, player.ownedByLocalPlayer)
         {
             fadeSprite = "buster3_fade";
             reflectable = true;
@@ -177,6 +188,126 @@ namespace MMXOnline
             projId = (int)ProjIds.BusterUnpo;
         }
     }
+    public class BusterUnpoUpProj : Projectile
+{
+	public BusterUnpoUpProj(Weapon weapon, Point pos, int xDir, Player player, ushort netProjId, bool rpc = false)
+		: base(weapon, pos, xDir, 350f, 4f, player, "buster_unpo_up", 26, 0.05f, netProjId, player.ownedByLocalPlayer)
+	{
+		fadeSprite = "buster3_fade";
+		maxTime = 1.25f;
+		projId = 400;
+		vel.x = 0f;
+		vel.y = -500f;
+		if (rpc)
+		{
+			rpcCreate(pos, player, netProjId, xDir);
+		}
+	}
+}
+    public class XUPUpShot : CharState
+{
+	public Projectile busterUnpoUpProj;
+
+	public float Time;
+
+	public XUPUpShot()
+		: base("unpo_up_air_shot", "", "", "")
+	{
+		enterSound = "buster2";
+	}
+
+	public override void onEnter(CharState oldState)
+	{
+		base.onEnter(oldState);
+		busterUnpoUpProj = new BusterUnpoUpProj(base.player.weapon, character.getShootPos(), character.getShootXDir(), base.player, base.player.getNextActorNetId(), rpc: true);
+		new Anim(character.getShootPos(), "buster_unpo_up_muzzle", character.getShootXDir(), base.player.getNextActorNetId(), destroyOnEnd: true, sendRpc: true);
+		if (character.grounded)
+		{
+			character.changeSpriteFromName("unpo_up_shot", resetFrame: true);
+		}
+	}
+
+	public override void onExit(CharState newState)
+	{
+		base.onExit(newState);
+		busterUnpoUpProj.destroySelf();
+	}
+
+	public override void update()
+	{
+		base.update();
+		Time += Global.spf;
+		if (!character.grounded)
+		{
+			airCode();
+		}
+		if ((double)Time > 0.2)
+		{
+			character.changeState(new Idle());
+		}
+	}
+}
+    public class BusterUnpoDownProj : Projectile
+{
+	public BusterUnpoDownProj(Weapon weapon, Point pos, int xDir, Player player, ushort netProjId, bool rpc = false)
+		: base(weapon, pos, xDir, 350f, 4f, player, "buster_unpo_down", 26, 0.05f, netProjId, player.ownedByLocalPlayer)
+	{
+		fadeSprite = "buster3_fade";
+		maxTime = 1.25f;
+		projId = 401;
+		vel.x = 0f;
+		vel.y = 500f;
+		if (rpc)
+		{
+			rpcCreate(pos, player, netProjId, xDir);
+		}
+	}
+}
+    public class XUPDownShot : CharState
+{
+	public Projectile busterUnpoDownProj;
+
+	public float Time;
+
+	public XUPDownShot()
+		: base("unpo_down_shot", "", "", "")
+	{
+		enterSound = "buster2";
+	}
+
+	public override void onEnter(CharState oldState)
+	{
+		base.onEnter(oldState);
+		busterUnpoDownProj = new BusterUnpoDownProj(base.player.weapon, character.pos, character.xDir, base.player, base.player.getNextActorNetId(), rpc: true);
+		new Anim(character.getShootPos(), "buster_unpo_down_muzzle", character.getShootXDir(), base.player.getNextActorNetId(), destroyOnEnd: true, sendRpc: true);
+	}
+
+	public override void onExit(CharState newState)
+	{
+		base.onExit(newState);
+		busterUnpoDownProj.destroySelf();
+		character.useGravity = true;
+		character.airAttackCooldown = 2f;
+	}
+
+	public override void update()
+	{
+		base.update();
+		if (base.player != null)
+		{
+			if (!once)
+			{
+				once = true;
+				character.vel = new Point(0f, -300f);
+			}
+			Time += Global.spf;
+			if ((double)Time > 0.2)
+			{
+				character.changeState(new Fall());
+			}
+		}
+	}
+}
 
     public class Buster3Proj : Projectile
     {

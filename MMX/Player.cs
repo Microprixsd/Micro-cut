@@ -1436,7 +1436,7 @@ namespace MMXOnline
 
         public bool canUpgradeGoldenX()
         {
-            return character != null && isX && !isDisguisedAxl && character.charState is not Die && !Global.level.is1v1() && hasAllX3Armor() && !hasAnyChip() && !hasUltimateArmor() && !hasGoldenArmor() && scrap >= 5 && !usedChipOnce;
+            return character != null && isX && !isDisguisedAxl && character.charState is not Die && !Global.level.is1v1() && hasAllX3Armor() && !hasAnyChip() && !hasUltimateArmor() && !hasGoldenArmor() && scrap >= 5;
         }
 
         public bool canUpgradeUltimateX()

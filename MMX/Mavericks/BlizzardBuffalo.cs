@@ -572,7 +572,7 @@ namespace MMXOnline
 
     public class BBuffaloDragged : GenericGrabbedState
     {
-        public const float maxGrabTime = 4;
+        public const float maxGrabTime = 5;
         public BBuffaloDragged(BlizzardBuffalo grabber) :
             base(grabber, maxGrabTime, "_dash", reverseZIndex: true, freeOnHitWall: false, lerp: true, additionalGrabSprite: "_dash_grab")
         {

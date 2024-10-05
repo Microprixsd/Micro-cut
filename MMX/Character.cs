@@ -64,7 +64,7 @@ namespace MMXOnline
         public bool insideCharacter;
         public float invulnTime = 0;
         public float parryCooldown;
-        public float maxParryCooldown = 0.25f;
+        public float maxParryCooldown = 1f;
 
         public bool stockedCharge;
         public void stockCharge(bool stockOrUnstock)
@@ -300,7 +300,7 @@ namespace MMXOnline
             acidHurtCooldown = 0.5f;
             acidTime += time;
             oilTime = 0;
-            if (acidTime > 8) acidTime = 8;
+            if (acidTime > 6) acidTime = 6;
         }
 
         public float oilTime;
@@ -699,7 +699,7 @@ namespace MMXOnline
             if (gaeaShield != null) return false;
             if (sniperMissileProj != null) return false;
             if (charState is GravityWellChargedState) return false;
-            if (player.weapon is TriadThunder triadThunder && triadThunder.shootTime > 0.75f) return false;
+            if (player.weapon is TriadThunder triadThunder && triadThunder.shootTime > 0.45) return false;
             if (player.weapon is AssassinBullet && chargeTime > 0) return false;
             if (revTime > 0.5f) return false;
             if (isShootingLongshotGizmo) return false;
@@ -1410,9 +1410,9 @@ namespace MMXOnline
                 {
                     stingChargeTime -= Global.spf;
                     
-                    player.weapon.ammo -= (Global.spf * 3 * (player.hasChip(3) ? 0.5f : 1));
+                    player.weapon.ammo -= Global.spf * 1 * (player.hasChip(3) ? 0.5f : 1);
                     if (player.weapon.ammo < 0) player.weapon.ammo = 0;
-                    stingChargeTime = player.weapon.ammo;
+                    /*stingChargeTime = player.weapon.ammo;*/
                 }
                 else
                 {
@@ -1654,12 +1654,12 @@ namespace MMXOnline
         {
             // The former two hyper modes rely on a float time value sync.
             // The latter two hyper modes are boolean states so use the BoolState ("BS") system.
-            return isAwakenedGenmuZeroBS.getValue() || (isInvisibleBS.getValue() && player.isAxl) || isHyperSigmaBS.getValue() || isHyperXBS.getValue();
+            return (isInvisibleBS.getValue() && player.isAxl) || isHyperSigmaBS.getValue() || isHyperXBS.getValue();
         }
 
         public bool isToughGuyHyperMode()
         {
-            return isBlackZero() || isWhiteAxl();
+            return isBlackZero() || isWhiteAxl() || isAwakenedGenmuZero();
         }
 
         public bool isImmuneToKnockback()
@@ -3317,7 +3317,7 @@ namespace MMXOnline
                 else
                 {
                     flinchFrames = 0;
-                    miniFlinchTime = 0.1f;
+                    miniFlinchTime = 0.245f;
                 }
             }
             if (!(charState is Die) && !(charState is InRideArmor) && !(charState is InRideChaser))
@@ -3530,7 +3530,7 @@ namespace MMXOnline
                         damage = 4;
                         flinch = Global.defFlinch;
                     }
-                    Projectile proj = new GenericMeleeProj(player.awakenedAuraWeapon, centerPoint, ProjIds.AwakenedAura, player, damage, flinch, 0.5f);
+                    Projectile proj = new GenericMeleeProj(player.awakenedAuraWeapon, centerPoint, ProjIds.AwakenedAura, player, damage, flinch, 1f);
                     proj.globalCollider = globalCollider.clone();
                     return proj;
                 };

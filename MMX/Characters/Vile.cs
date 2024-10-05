@@ -130,7 +130,7 @@ namespace MMXOnline
             }
             else if (!isShootingLongshotGizmo && !isShootingVulcan)
             {
-                player.vileAmmo += Global.spf * 15;
+                player.vileAmmo += Global.spf * 12.5f;
                 if (player.vileAmmo > player.vileMaxAmmo)
                 {
                     player.vileAmmo = player.vileMaxAmmo;
@@ -670,13 +670,14 @@ namespace MMXOnline
             if (isVileMK2)
             {
                 float innerModifier = 1f;
-                if (weapon is VileMissile) innerModifier = 0.33f;
+                if (weapon is VileMissile && !(weapon.type == (int)VileMissileType.PopcornDemon)) innerModifier = 0.33f;
                 weapon.shootTime = targetCooldownWeapon.rateOfFire * innerModifier * modifier;
             }
             else
             {
                 weapon.shootTime = targetCooldownWeapon.rateOfFire * modifier;
             }
+            
         }
 
         public Projectile getVileProjFromHitbox(Point centerPoint)

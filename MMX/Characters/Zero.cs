@@ -150,18 +150,11 @@ namespace MMXOnline
                         zeroShoot(2);
                     }
                     else if (chargeLevel >= 3)
-                    {
-                        if (player.scrap >= 10 && !hyperZeroUsed && flag == null && !player.isZBusterZero())
-                        {
-                            changeState(new HyperZeroStart(player.zeroHyperMode), true);
-                        }
-                        else
-                        {
-                            zeroShoot(chargeLevel);
-                        }
-                    }
-                }
-                stopCharge();
+                   {
+					zeroShoot(chargeLevel);
+				}
+			}
+			stopCharge();
             }
             chargeLogic();
 
@@ -607,15 +600,15 @@ namespace MMXOnline
             else if (sprite.name == "zero_ladder_attack") proj = new GenericMeleeProj(player.zSaberWeapon, centerPoint, ProjIds.ZSaberladder, player, 3, 0, 0.25f, isReflectShield: true);
             else if (sprite.name == "zero_wall_slide_attack") proj = new GenericMeleeProj(player.zSaberWeapon, centerPoint, ProjIds.ZSaberslide, player, 3, 0, 0.25f, isReflectShield: true);
             else if (sprite.name == "zero_attack_crouch") proj = new GenericMeleeProj(player.zSaberWeapon, centerPoint, ProjIds.ZSabercrouch, player, 3, 0, 0.25f, isReflectShield: true);
-            else if (sprite.name == "zero_raijingeki") proj = new GenericMeleeProj(player.raijingekiWeapon, centerPoint, ProjIds.Raijingeki, player, 2, Global.defFlinch, 0.06f);
-            else if (sprite.name == "zero_raijingeki2") proj = new GenericMeleeProj(player.raijingeki2Weapon, centerPoint, ProjIds.Raijingeki2, player, 2, Global.defFlinch, 0.06f);
+            else if (sprite.name == "zero_raijingeki") proj = new GenericMeleeProj(player.raijingekiWeapon, centerPoint, ProjIds.Raijingeki, player, 2, Global.defFlinch, 0.068f);
+            else if (sprite.name == "zero_raijingeki2") proj = new GenericMeleeProj(player.raijingeki2Weapon, centerPoint, ProjIds.Raijingeki2, player, 2, Global.defFlinch, 0.068f);
             else if (sprite.name == "zero_tbreaker") proj = new GenericMeleeProj(player.raijingekiWeapon, centerPoint, ProjIds.TBreaker, player, 6, Global.defFlinch, 0.5f);
-            else if (sprite.name == "zero_ryuenjin") proj = new GenericMeleeProj(new RyuenjinWeapon(player), centerPoint, ProjIds.Ryuenjin, player, 4, 0, 0.2f);
+            else if (sprite.name == "zero_ryuenjin") proj = new GenericMeleeProj(new RyuenjinWeapon(player), centerPoint, ProjIds.Ryuenjin, player, 4, 0, 0.45f);
             else if (sprite.name == "zero_eblade") proj = new GenericMeleeProj(new EBladeWeapon(player), centerPoint, ProjIds.EBlade, player, 3, Global.defFlinch, 0.1f);
             else if (sprite.name == "zero_rising")
             {
                 //float overrideDamage = sprite.time > 0.1f ? 2 : 1;
-                proj = new GenericMeleeProj(new RisingWeapon(player), centerPoint, ProjIds.Rising, player, 1, 0, 0.15f);
+                proj = new GenericMeleeProj(new RisingWeapon(player), centerPoint, ProjIds.Rising, player, 2, 0, 0.28f);
             }
             else if (sprite.name.Contains("hyouretsuzan")) proj = new GenericMeleeProj(new HyouretsuzanWeapon(player), centerPoint, ProjIds.Hyouretsuzan2, player, 3, 12, 0.5f);
             else if (sprite.name.Contains("rakukojin"))
@@ -978,7 +971,7 @@ namespace MMXOnline
     {
         public KKnuckleParry() : base()
         {
-            rateOfFire = 0.75f;
+            rateOfFire = 0.5f;
             index = (int)WeaponIds.KKnuckleParry;
             killFeedIndex = 172;
         }
@@ -1103,7 +1096,7 @@ namespace MMXOnline
         public override void onExit(CharState newState)
         {
             base.onExit(newState);
-            character.parryCooldown = character.maxParryCooldown;
+            character.parryCooldown = 0;
         }
     }
 }

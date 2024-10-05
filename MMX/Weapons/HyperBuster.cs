@@ -19,7 +19,7 @@ namespace MMXOnline
             weaponBarIndex = 31;
             weaponSlotIndex = 36;
             shootSounds = new List<string>() { "buster4", "buster4", "buster4", "buster4" };
-            rateOfFire = 2f;
+            rateOfFire = 2.4f;
             switchCooldown = 0.25f;
             ammo = 0;
         }
@@ -35,8 +35,8 @@ namespace MMXOnline
         }
 
         public float getChipFactoredAmmoUsage(Player player)
-        {
-            return player.hasChip(3) ? ammoUsage / 2 : ammoUsage;
+        { 
+            return ammoUsage;
         }
 
         public static float getRateofFireMod(Player player)

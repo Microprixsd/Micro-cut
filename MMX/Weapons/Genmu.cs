@@ -21,7 +21,7 @@ namespace MMXOnline
         public float initY = 0;
 
         public GenmuProj(Weapon weapon, Point pos, int xDir, int type, Player player, ushort netProjId, bool rpc = false) :
-            base(weapon, pos, xDir, 300, 12, player, "genmu_proj", Global.defFlinch, 0.5f, netProjId, player.ownedByLocalPlayer)
+            base(weapon, pos, xDir, 300, 8, player, "genmu_proj", Global.defFlinch, 0.5f, netProjId, player.ownedByLocalPlayer)
         {
             this.type = type;
             initY = pos.y;

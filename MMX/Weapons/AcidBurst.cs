@@ -56,7 +56,7 @@ namespace MMXOnline
             useGravity = true;
             maxTime = 1.5f;
             projId = (int)ProjIds.AcidBurst;
-            vel = new Point(xDir * 100, -200);
+            vel = new Point(xDir * 140, -155);
             fadeSound = "acidBurst";
             checkUnderwater();
             if (rpc)

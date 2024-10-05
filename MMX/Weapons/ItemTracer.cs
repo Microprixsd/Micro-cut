@@ -11,7 +11,7 @@ namespace MMXOnline
         public ItemTracer() : base()
         {
             shootSounds = new List<string>() { "", "", "", "" };
-            rateOfFire = 1f;
+            rateOfFire = 0.5f;
             index = (int)WeaponIds.ItemTracer;
             weaponBarBaseIndex = 26;
             weaponBarIndex = weaponBarBaseIndex;
@@ -23,7 +23,7 @@ namespace MMXOnline
         {
             if (player?.character == null || !player.character.ownedByLocalPlayer) return;
 
-            player.character.scannerCooldown = 1;
+            player.character.scannerCooldown = 0.5f;
             ammo -= 3;
             Character target = null;
             player.character.playSound("itemTracer", sendRpc: true);

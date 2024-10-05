@@ -13,7 +13,7 @@ namespace MMXOnline
         public RaySplasher() : base()
         {
             shootSounds = new List<string>() { "raySplasher", "raySplasher", "raySplasher", "warpIn" };
-            rateOfFire = 1f;
+            rateOfFire = 1.2f;
             index = (int)WeaponIds.RaySplasher;
             weaponBarBaseIndex = 21;
             weaponBarIndex = weaponBarBaseIndex;
@@ -38,7 +38,7 @@ namespace MMXOnline
     public class RaySplasherProj : Projectile
     {
         public RaySplasherProj(Weapon weapon, Point pos, int xDir, int spriteType, int dirType, bool isTurret, Player player, ushort netProjId, bool rpc = false) : 
-            base(weapon, pos, xDir, 600, 1, player, "raysplasher_proj", 0, 0.075f, netProjId, player.ownedByLocalPlayer)
+            base(weapon, pos, xDir, 600, 1, player, "raysplasher_proj", 0, 0.09f, netProjId, player.ownedByLocalPlayer)
         {
             maxTime = 0.25f;
             projId = (int)ProjIds.RaySplasher;
@@ -75,8 +75,8 @@ namespace MMXOnline
     {
         int state = 0;
         Actor target;
-        float health = 4;
-        float maxHealth = 4;
+        float health = 5;
+        float maxHealth = 5;
         const float range = 130;
         float drainTime;
 

@@ -203,7 +203,7 @@ namespace MMXOnline
     {
         public VileMK2StunShot() : base()
         {
-            rateOfFire = 0.75f;
+            rateOfFire = 0.33f;
             index = (int)WeaponIds.MK2StunShot;
             killFeedIndex = 67;
         }

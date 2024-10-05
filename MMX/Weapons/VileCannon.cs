@@ -37,7 +37,7 @@ namespace MMXOnline
             }
             else if (vileCannonType == VileCannonType.FrontRunner)
             {
-                rateOfFire = 0.75f;
+                rateOfFire = 1f;
                 vileAmmoUsage = 8;
                 displayName = "Front Runner";
                 projSprite = "vile_mk2_proj";
@@ -47,8 +47,8 @@ namespace MMXOnline
             }
             else if (vileCannonType == VileCannonType.FatBoy)
             {
-                rateOfFire = 0.75f;
-                vileAmmoUsage = 24;
+                rateOfFire = 1f;
+                vileAmmoUsage = 20;
                 displayName = "Fat Boy";
                 projSprite = "vile_mk2_fb_proj";
                 fadeSprite = "vile_mk2_fb_proj_fade";
@@ -60,7 +60,7 @@ namespace MMXOnline
             if (vileCannonType == VileCannonType.LongshotGizmo)
             {
                 rateOfFire = 0.1f;
-                vileAmmoUsage = 4;
+                vileAmmoUsage = 3;
                 displayName = "Longshot Gizmo";
                 projSprite = "vile_mk2_lg_proj";
                 fadeSprite = "vile_mk2_lg_proj_fade";
@@ -79,7 +79,7 @@ namespace MMXOnline
             Player player = character.player;
             if (shootTime > 0 || !player.vileMissileWeapon.isCooldownPercentDone(0.5f)) return;
             if (character.charState is MissileAttack || character.charState is RocketPunchAttack) return;
-            float overrideAmmoUsage = (isLongshotGizmo && character.isVileMK2) ? 6 : vileAmmoUsage;
+            float overrideAmmoUsage = vileAmmoUsage;
 
             if (isLongshotGizmo && character.longshotGizmoCount > 0)
             {
@@ -178,6 +178,7 @@ namespace MMXOnline
                 yScale = 0.75f;
 
                 damager.damage = 1;
+                maxTime = 0.7f;
                 
                 /*
                 if (player.vileAmmo >= 32 - weapon.vileAmmoUsage) damager.damage = 3;

@@ -39,7 +39,7 @@ namespace MMXOnline
 
     public class FireWaveProj : Projectile
     {
-        public FireWaveProj(Weapon weapon, Point pos, int xDir, Player player, ushort netProjId) : base(weapon, pos, xDir, 400, 1, player, "fire_wave", 0, 0.2f, netProjId, player.ownedByLocalPlayer)
+        public FireWaveProj(Weapon weapon, Point pos, int xDir, Player player, ushort netProjId) : base(weapon, pos, xDir, 400, 1, player, "fire_wave", 0, 0.185f, netProjId, player.ownedByLocalPlayer)
         {
             projId = (int)ProjIds.FireWave;
             fadeSprite = "fire_wave_fade";
@@ -65,7 +65,7 @@ namespace MMXOnline
 
     public class FireWaveProjChargedStart : Projectile
     {
-        public FireWaveProjChargedStart(Weapon weapon, Point pos, int xDir, Player player, ushort netProjId) : base(weapon, pos, xDir, 150, 2, player, "fire_wave_charge", 0, 0.222f, netProjId, player.ownedByLocalPlayer)
+        public FireWaveProjChargedStart(Weapon weapon, Point pos, int xDir, Player player, ushort netProjId) : base(weapon, pos, xDir, 150, 2, player, "fire_wave_charge", Global.defFlinch, 0.222f, netProjId, player.ownedByLocalPlayer)
         {
             projId = (int)ProjIds.FireWaveChargedStart;
             collider.wallOnly = true;
@@ -116,7 +116,7 @@ namespace MMXOnline
         public bool reversedOnce;
         public int timesReversed;
         float soundCooldown;
-        public FireWaveProjCharged(Weapon weapon, Point pos, int xDir, Player player, float parentTime, ushort netProjId, int timesReversed, bool rpc = false) : base(weapon, pos, xDir, 0, 1, player, "fire_wave_charge", 0, 0.33f, netProjId, player.ownedByLocalPlayer)
+        public FireWaveProjCharged(Weapon weapon, Point pos, int xDir, Player player, float parentTime, ushort netProjId, int timesReversed, bool rpc = false) : base(weapon, pos, xDir, 0, 1, player, "fire_wave_charge", 0, 0.5f, netProjId, player.ownedByLocalPlayer)
         {
             projId = (int)ProjIds.FireWaveCharged;
             spriteMid = Global.sprites["fire_wave_charge"].clone();

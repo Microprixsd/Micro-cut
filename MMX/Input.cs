@@ -711,26 +711,80 @@ namespace MMXOnline
         }
 
         public bool isXDirHeld(int xDir, Player player)
-        {
-            if (xDir == 1 && isHeld(Control.Right, player)) return true;
-            if (xDir == -1 && isHeld(Control.Left, player)) return true;
-            return false;
-        }
+	{
+		if (xDir == 1 && isHeld("right", player))
+		{
+			return true;
+		}
+		if (xDir == -1 && isHeld("left", player))
+		{
+			return true;
+		}
+		return false;
+	}
 
-        public bool isWeaponLeftOrRightPressed(Player player)
-        {
-            return isPressed(Control.WeaponLeft, player) || isPressed(Control.WeaponRight, player);
-        }
+	public bool isWeaponLeftOrRightPressed(Player player)
+	{
+		if (!isPressed("weaponleft", player))
+		{
+			return isPressed("weaponright", player);
+		}
+		return true;
+	}
 
-        public bool isWeaponLeftOrRightHeld(Player player)
-        {
-            return isHeld(Control.WeaponLeft, player) || isHeld(Control.WeaponRight, player);
-        }
+	public bool isWeaponLeftPressed(Player player)
+	{
+		if (!isPressed("weaponleft", player))
+		{
+			return isPressed("weaponleft", player);
+		}
+		return true;
+	}
 
-        public bool isLeftOrRightHeld(Player player)
-        {
-            return isHeld(Control.Left, player) || isHeld(Control.Right, player);
-        }
+	public bool isWeaponRightPressed(Player player)
+	{
+		if (!isPressed("weaponright", player))
+		{
+			return isPressed("weaponright", player);
+		}
+		return true;
+	}
+
+	public bool isWeaponLeftHeld(Player player)
+	{
+		if (!isHeld("weaponleft", player))
+		{
+			return isHeld("weaponleft", player);
+		}
+		return true;
+	}
+
+	public bool isWeaponRightHeld(Player player)
+	{
+		if (!isHeld("weaponright", player))
+		{
+			return isHeld("weaponright", player);
+		}
+		return true;
+	}
+
+	public bool isWeaponLeftOrRightHeld(Player player)
+	{
+		if (!isHeld("weaponleft", player))
+		{
+			return isHeld("weaponright", player);
+		}
+		return true;
+	}
+
+	public bool isLeftOrRightHeld(Player player)
+	{
+		if (!isHeld("left", player))
+		{
+			return isHeld("right", player);
+		}
+		return true;
+	}
 
         public bool isCommandButtonPressed(Player player)
         {

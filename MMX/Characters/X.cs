@@ -33,9 +33,8 @@ namespace MMXOnline
         public GaeaShieldProj gaeaShield;
         public GravityWellProj gravityWell;
         public int totalChipHealAmount;
-        public const int maxTotalChipHealAmount = 32;
-        public int unpoShotCount;
-
+        public const int maxTotalChipHealAmount = 24;
+        public float unpocrushCooldown = 1f;
         public float hadoukenCooldownTime;
         public float maxHadoukenCooldownTime = 1f;
         public float shoryukenCooldownTime;
@@ -48,9 +47,6 @@ namespace MMXOnline
         float noDamageTime;
         float rechargeHealthTime;
         public float scannerCooldown;
-        float UPDamageCooldown;
-        public float unpoDamageMaxCooldown = 2;
-        float unpoTime;
 
         public int cStingPaletteIndex;
         public float cStingPaletteTime;
@@ -82,6 +78,7 @@ namespace MMXOnline
                 player.fgMoveAmmo += Global.spf;
                 if (player.fgMoveAmmo > 32) player.fgMoveAmmo = 32;
             }
+            Helpers.decrementTime(ref unpocrushCooldown);
             Helpers.decrementTime(ref xSaberCooldown);
             Helpers.decrementTime(ref scannerCooldown);
             Helpers.decrementTime(ref hadoukenCooldownTime);
@@ -207,78 +204,66 @@ namespace MMXOnline
             Helpers.decrementTime(ref upPunchCooldown);
 
             if (isHyperX && !isInvulnerableAttack())
-            {
-                if (player.input.isPressed(Control.Shoot, player) &&
-                    (charState is Idle || charState is Run || charState is Fall || charState is Jump || charState is Dash))
-                {
-                    if (unpoShotCount <= 0)
-                    {
-                        upPunchCooldown = 0.5f;
-                        changeState(new XUPPunchState(grounded), true);
-                        return;
-                    }
-                }
-                else if (player.input.isPressed(Control.Special1, player) && !isInvisible() &&
-                    (charState is Dash || charState is AirDash))
-                {
-                    charState.isGrabbing = true;
-                    changeSpriteFromName("unpo_grab_dash", true);
-                }
-                else if (player.input.isPressed(Control.Special1, player) &&
-                    (charState is Idle || charState is Run || charState is Fall || charState is Jump))
-                {
-                    upPunchCooldown = 0.5f;
-                    changeState(new XUPPunchState(grounded), true);
-                    return;
-                }
-                else if 
-                (
-                    player.input.isWeaponLeftOrRightPressed(player) && parryCooldown == 0 &&
-                    (charState is Idle || charState is Run || charState is Fall || charState is Jump || charState is XUPPunchState || charState is XUPGrabState)
-                )
-                {
-                    if (unpoAbsorbedProj != null)
-                    {
-                        changeState(new XUPParryProjState(unpoAbsorbedProj, true, false), true);
-                        unpoAbsorbedProj = null;
-                        return;
-                    }
-                    else
-                    {
-                        changeState(new XUPParryStartState(), true);
-                    }
-                }
-            }
+		{
+			if (player.input.isPressed("special1", player) && !isInvisible() && (charState is Dash || charState is AirDash))
+			{
+				charState.isGrabbing = true;
+				changeSpriteFromName("unpo_grab_dash", resetFrame: true);
+			}
+			else if (player.input.isWeaponRightPressed(player) && parryCooldown == 0f && (charState is Idle || charState is Run || charState is Fall || charState is Jump || charState is XUPPunchState || charState is XUPGrabState))
+			{
+				if (unpoAbsorbedProj != null)
+				{
+					changeState(new XUPParryProjState(grounded, unpoAbsorbedProj, shootProj: true, absorbThenShoot: false), forceChange: true);
+					unpoAbsorbedProj = null;
+					return;
+				}
+				changeState(new XUPParryStartState(grounded), forceChange: true);
+			}
+			else if (player.input.isWeaponLeftPressed(player) && unpocrushCooldown == 0f && (charState is Idle || charState is Run || charState is Fall || charState is Jump))
+			{
+				unpocrushCooldown = 2f;
+				changeState(new UnlimitedCrushState(), forceChange: true);
+				return;
+			}
+            if (player.input.isPressed("special1", player) && (charState is Idle || charState is Run || charState is Fall || charState is Jump))
+			{
+				upPunchCooldown = 0f;
+				changeState(new XUPPunchState(grounded), forceChange: true);
+				return;
+			}
+			if (player.input.isHeld("special1", player))
+			{
+				increaseCharge();
+			}
+			else
+			{
+				if (isCharging() && getChargeLevel() >= 2 && getChargeLevel() >= 2 && isHyperX)
+				{
+					changeState(new XUPPunchChargedState(), forceChange: true);
+				}
+				stopCharge();
+			}
+			if (player.input.isHeld("down", player) && player.input.isPressed("dash", player) && (charState is Idle || charState is Dash))
+			{
+				changeState(new KickChargeState(), forceChange: true);
+				return;
+			}
+            if (player.isSpecialSaber() && canShoot() && canChangeWeapons() && isHyperX && player.input.isPressed("command", player) && !isAttacking() && !isInvisible() && !charState.isGrabbing && (charState is Idle || charState is Run || charState is Fall || charState is Jump || charState is Dash) && xSaberCooldown == 0f)
+		    {
+                xSaberCooldown = 1f;
+			    changeState(new X6SaberState(grounded), forceChange: true);
+			    return;
+		    }
 
-            if (player.isSpecialSaber() && canShoot() && canChangeWeapons() && player.armorFlag == 0 && player.input.isPressed(Control.Special1, player) && !isAttacking() && !isInvisible() && !charState.isGrabbing && !isHyperX &&
-                (charState is Idle || charState is Run || charState is Fall || charState is Jump || charState is Dash))
-            {
-                if (xSaberCooldown == 0)
-                {
-                    xSaberCooldown = 1f;
-                    changeState(new X6SaberState(grounded), true);
-                    return;
-                }
-            }
-
-            if (isHyperX)
-            {
-                if (unpoTime > 12) unpoDamageMaxCooldown = 1;
-                if (unpoTime > 24) unpoDamageMaxCooldown = 0.75f;
-                if (unpoTime > 36) unpoDamageMaxCooldown = 0.5f;
-                if (unpoTime > 48) unpoDamageMaxCooldown = 0.25f;
-
-                if (charState is not XUPGrabState && charState is not XUPParryMeleeState && charState is not XUPParryProjState)
-                {
-                    unpoTime += Global.spf;
-                    UPDamageCooldown += Global.spf;
-                    if (UPDamageCooldown > unpoDamageMaxCooldown)
-                    {
-                        UPDamageCooldown = 0;
-                        applyDamage(null, null, 1, null);
-                    }
-                }
-            }
+		}
+		if (player.isSpecialSaber() && canShoot() && canChangeWeapons() && player.armorFlag == 0 && player.input.isPressed("special1", player) && !isAttacking() && !isInvisible() && !charState.isGrabbing && !isHyperX && (charState is Idle || charState is Run || charState is Fall || charState is Jump || charState is Dash) && xSaberCooldown == 0f)
+		{
+			xSaberCooldown = 1f;
+			changeState(new X6SaberState(grounded), forceChange: true);
+			return;
+		}
+    
 
             if (player.hasHelmetArmor(2) && scannerCooldown == 0 && canScan() && inputDir.isZero())
             {
@@ -380,7 +365,7 @@ namespace MMXOnline
                 bool shootCondition =
                     shootPressed ||
                     (framesSinceLastShootPressed < Global.normalizeFrames(6) && framesSinceLastShootReleased > Global.normalizeFrames(30)) ||
-                    (shootHeld && player.weapon.isStream && chargeTime < charge1Time);
+                    (shootHeld && player.weapon.isStream && chargeTime < charge3Time);
                 if (!fgMotion && offCooldown && shootCondition)
                 {
                     shoot(false);
@@ -390,19 +375,8 @@ namespace MMXOnline
                 {
                     chargeControls();
                 }
-                else
-                {
-                    unpoChargeControls();
-                }
             }
-            else if (charState is Dash || charState is AirDash || charState is XUPParryMeleeState || charState is XUPParryProjState || charState is XUPParryStartState || charState is XUPGrabState)
-            {
-                if (isHyperX)
-                {
-                    unpoChargeControls();
-                }
-            }
-
+            
             player.isShootingSpecialBuster = false;
 
             if (chargedSpinningBlade != null || chargedFrostShield != null || chargedTunnelFang != null)
@@ -467,7 +441,7 @@ namespace MMXOnline
                     var busterPos = getShootPos();
                     if (raySplasherCooldown2 == 0)
                     {
-                        player.weapon.addAmmo(-0.15f, player);
+                        player.weapon.addAmmo(-0.10f, player);
                         raySplasherCooldown2 = 0.03f;
                         new RaySplasherProj(player.weapon, busterPos, getShootXDir(), raySplasherMod % 3, (raySplasherMod / 3) % 3, false, player, player.getNextActorNetId(), rpc: true);
                         raySplasherMod++;
@@ -541,35 +515,10 @@ namespace MMXOnline
             }
         }
 
-        public void unpoChargeControls()
-        {
-            if (player.chargeButtonHeld() && canCharge())
-            {
-                increaseCharge();
-                if (getChargeLevel() == 1) unpoShotCount = Math.Max(unpoShotCount, 1);
-                if (getChargeLevel() == 2) unpoShotCount = Math.Max(unpoShotCount, 2);
-                if (getChargeLevel() == 3) unpoShotCount = Math.Max(unpoShotCount, 3);
-                if (getChargeLevel() == 4) unpoShotCount = Math.Max(unpoShotCount, 4);
-            }
-            else
-            {
-                if (isCharging())
-                {
-                    stopCharge();
-                }
-                else if (!(charState is Hurt))
-                {
-                    stopCharge();
-                }
-            }
-        }
-
         public void shoot(bool doCharge)
         {
             int chargeLevel = getChargeLevel();
             if (!doCharge && chargeLevel == 3) return;
-
-            if (isHyperX && unpoShotCount <= 0) return;
 
             if (!player.weapon.canShoot(chargeLevel, player))
             {
@@ -699,12 +648,6 @@ namespace MMXOnline
             else
             {
                 streamCooldown = 0.25f;
-            }
-
-            if (isHyperX)
-            {
-                unpoShotCount--;
-                if (unpoShotCount < 0) unpoShotCount = 0;
             }
         }
 
@@ -1022,7 +965,7 @@ namespace MMXOnline
             if (sprite.name.Contains("beam_saber") && sprite.name.Contains("2"))
             {
                 float overrideDamage = 3;
-                if (!grounded) overrideDamage = 2;
+                if (!grounded) overrideDamage = 3;
                 proj = new GenericMeleeProj(new XSaber(player), centerPoint, ProjIds.X6Saber, player, damage: overrideDamage, flinch: 0);
             }
             else if (sprite.name.Contains("beam_saber"))
@@ -1047,17 +990,29 @@ namespace MMXOnline
             }
             else if (sprite.name.Contains("unpo_punch"))
             {
-                proj = new GenericMeleeProj(new XUPPunch(player), centerPoint, ProjIds.UPPunch, player);
+                proj = new GenericMeleeProj(new XUPPunch(player), centerPoint, ProjIds.UPPunch, player, 3, 26, 0.25f);
             }
             else if (sprite.name.Contains("unpo_air_punch"))
             {
                 proj = new GenericMeleeProj(new XUPPunch(player), centerPoint, ProjIds.UPPunch, player, damage: 3, flinch: Global.halfFlinch);
             }
             else if (sprite.name.Contains("unpo_parry_start"))
-            {
-                proj = new GenericMeleeProj(new XUPParry(), centerPoint, ProjIds.UPParryBlock, player, 0, 0, 1);
-            }
-
+		{
+			proj = new GenericMeleeProj(new XUPParry(), centerPoint, ProjIds.UPParryBlock, player, 0f, 0, 1f);
+		}
+		else if (sprite.name.Contains("unpo_punch2"))
+		{
+			proj = new GenericMeleeProj(new XUPPunchCharged(player), centerPoint, ProjIds.XUPPunchCharged, player, 3, 26, 0.25f);
+		}
+		else if (sprite.name.Contains("unpo_slide"))
+		{
+			proj = new GenericMeleeProj(new KickCharge(player), centerPoint, ProjIds.KickCharge, player, 3, 26, 0.5f);
+		}
+		else if (sprite.name.Contains("unpo_gigga"))
+		{
+			proj = new GenericMeleeProj(new UnlimitedCrush(player), centerPoint, ProjIds.UnlimitedCrush, player);
+		}
+            
             return proj;
         }
     }

@@ -19,99 +19,100 @@ namespace MMXOnline
 
     // If fixing parry code also fix kknuckle parry
     public class XUPParryStartState : CharState
-    {
-        public XUPParryStartState() : base("unpo_parry_start", "", "", "")
-        {
-        }
+{
+	private bool grounded;
 
-        public override void update()
-        {
-            base.update();
+	public XUPParryStartState(bool grounded)
+		: base(grounded ? "unpo_parry_start" : "unpo_parry_air_start", "", "", "")
+	{
+		this.grounded = grounded;
+		landSprite = "unpo_parry_start";
+	}
 
-            if (stateTime < 0.1f)
-            {
-                character.turnToInput(player.input, player);
-            }
+	public override void update()
+	{
+		base.update();
+		if (stateTime < 0.1f && !character.grounded)
+		{
+			airCode();
+			character.turnToInput(base.player.input, base.player);
+		}
+		if (character.isAnimOver())
+		{
+			if (character.grounded)
+			{
+				character.changeState(new Idle(), forceChange: true);
+			}
+			else
+			{
+				character.changeState(new Fall(), forceChange: true);
+			}
+		}
+	}
 
-            if (character.isAnimOver())
-            {
-                character.changeToIdleOrFall();
-            }
-        }
+	public void counterAttack(Player damagingPlayer, Actor damagingActor, float damage)
+	{
+		Actor counterAttackTarget = null;
+		Projectile absorbedProj = null;
+		if (damagingActor is GenericMeleeProj gmp)
+		{
+			counterAttackTarget = gmp.owningActor;
+		}
+		else if (damagingActor is Projectile proj && !proj.canBeParried() && proj.shouldVortexSuck)
+		{
+			absorbedProj = proj;
+			absorbedProj.destroySelfNoEffect(rpc: false, doRpcEvenIfNotOwned: true);
+		}
+		if (absorbedProj != null)
+		{
+			if (character.ownedByLocalPlayer)
+			{
+				bool shootProj = false;
+				bool absorbThenShoot = false;
+				character.playSound("upParryAbsorb", forcePlay: false, sendRpc: true);
+				if (!base.player.input.isWeaponRightHeld(base.player))
+				{
+					character.unpoAbsorbedProj = absorbedProj;
+				}
+				else
+				{
+					shootProj = true;
+					absorbThenShoot = true;
+				}
+				character.changeState(new XUPParryProjState(grounded, absorbedProj, shootProj, absorbThenShoot), forceChange: true);
+			}
+			return;
+		}
+		if (counterAttackTarget == null)
+		{
+			counterAttackTarget = damagingPlayer?.character ?? damagingActor;
+		}
+		if (counterAttackTarget != null && character.pos.distanceTo(counterAttackTarget.pos) < 75f && counterAttackTarget is Character chr)
+		{
+			if (!chr.ownedByLocalPlayer)
+			{
+				RPC.actorToggle.sendRpc(chr.netId, RPCActorToggleType.ChangeToParriedState);
+			}
+			else
+			{
+				chr.changeState(new ParriedState(), forceChange: true);
+			}
+		}
+		character.playSound("upParry", forcePlay: false, sendRpc: true);
+		character.changeState(new XUPParryMeleeState(grounded, counterAttackTarget, damage), forceChange: true);
+	}
 
-        public void counterAttack(Player damagingPlayer, Actor damagingActor, float damage)
-        {
-            Actor counterAttackTarget = null;
-            Projectile absorbedProj = null;
-            if (damagingActor is GenericMeleeProj gmp)
-            {
-                counterAttackTarget = gmp.owningActor;
-            }
-            else if (damagingActor is Projectile proj)
-            {
-                if (!proj.canBeParried() && proj.shouldVortexSuck)
-                {
-                    absorbedProj = proj;
-                    absorbedProj.destroySelfNoEffect(doRpcEvenIfNotOwned: true);
-                }
-            }
+	public bool canParry()
+	{
+		return character.frameIndex == 0;
+	}
 
-            if (absorbedProj != null)
-            {
-                if (character.ownedByLocalPlayer)
-                {
-                    bool shootProj = false;
-                    bool absorbThenShoot = false;
-                    character.playSound("upParryAbsorb", sendRpc: true);
-                    if (!player.input.isWeaponLeftOrRightHeld(player))
-                    {
-                        character.unpoAbsorbedProj = absorbedProj;
-                        //character.player.weapons.Add(new AbsorbWeapon(absorbedProj));
-                    }
-                    else
-                    {
-                        shootProj = true;
-                        absorbThenShoot = true;
-                    }
-                    character.refillUnpoBuster();
-                    character.changeState(new XUPParryProjState(absorbedProj, shootProj, absorbThenShoot), true);
-                }
-
-                return;
-            }
-
-            if (counterAttackTarget == null)
-            {
-                counterAttackTarget = damagingPlayer?.character ?? damagingActor;
-            }
-
-            if (counterAttackTarget != null && character.pos.distanceTo(counterAttackTarget.pos) < 75 && counterAttackTarget is Character chr)
-            {
-                if (!chr.ownedByLocalPlayer)
-                {
-                    RPC.actorToggle.sendRpc(chr.netId, RPCActorToggleType.ChangeToParriedState);
-                }
-                else
-                {
-                    chr.changeState(new ParriedState(), true);
-                }
-            }
-            character.refillUnpoBuster();
-            character.playSound("upParry", sendRpc: true);
-            character.changeState(new XUPParryMeleeState(counterAttackTarget, damage), true);
-        }
-
-        public bool canParry()
-        {
-            return character.frameIndex == 0;
-        }
-
-        public override void onExit(CharState newState)
-        {
-            base.onExit(newState);
-            character.parryCooldown = character.maxParryCooldown;
-        }
-    }
+	public override void onExit(CharState newState)
+	{
+		base.onExit(newState);
+		character.parryCooldown = character.maxParryCooldown;
+	}
+}
 
     public class ParriedState : CharState
     {
@@ -162,64 +163,71 @@ namespace MMXOnline
     }
 
     public class XUPParryMeleeState : CharState
-    {
-        Actor counterAttackTarget;
-        float damage;
-        public XUPParryMeleeState(Actor counterAttackTarget, float damage) : base("unpo_parry_attack", "", "", "")
-        {
-            invincible = true;
-            this.counterAttackTarget = counterAttackTarget;
-            this.damage = damage;
-        }
+{
+	private Actor counterAttackTarget;
 
-        public override void update()
-        {
-            base.update();
+	private float damage;
 
-            if (counterAttackTarget != null)
-            {
-                character.turnToPos(counterAttackTarget.pos);
+	private bool grounded;
 
-                float dist = character.pos.distanceTo(counterAttackTarget.pos);
-                if (dist < 150)
-                {
-                    if (character.frameIndex >= 4 && !once)
-                    {
-                        if (character.pos.distanceTo(counterAttackTarget.pos) > 10)
-                        {
-                            character.moveToPos(counterAttackTarget.pos, 350);
-                        }
-                    }
-                }
-            }
+	public XUPParryMeleeState(bool grounded, Actor counterAttackTarget, float damage)
+		: base(grounded ? "unpo_parry_attack" : "unpo_parry_air_attack", "", "", "")
+	{
+		invincible = true;
+		this.counterAttackTarget = counterAttackTarget;
+		this.damage = damage;
+		this.grounded = grounded;
+		landSprite = "unpo_parry_attack";
+	}
 
-            Point? shootPos = character.getFirstPOI("melee");
-            if (!once && shootPos != null)
-            {
-                once = true;
-                new UPParryMeleeProj(new XUPParry(), shootPos.Value, character.xDir, damage, player, player.getNextActorNetId(), rpc: true);
-                character.playSound("upParryAttack", sendRpc: true);
-                character.shakeCamera(sendRpc: true);
-            }
+	public override void update()
+	{
+		base.update();
+		if (counterAttackTarget != null)
+		{
+			character.turnToPos(counterAttackTarget.pos);
+			if (character.pos.distanceTo(counterAttackTarget.pos) < 150f && character.frameIndex >= 2 && !once && character.pos.distanceTo(counterAttackTarget.pos) > 10f)
+			{
+				character.moveToPos(counterAttackTarget.pos, 350f);
+			}
+		}
+		Point? shootPos = character.getFirstPOI("melee");
+		if (!once && shootPos.HasValue)
+		{
+			once = true;
+			new UPParryMeleeProj(new XUPParry(), shootPos.Value, character.xDir, damage, base.player, base.player.getNextActorNetId(), rpc: true);
+			character.playSound("upParryAttack", forcePlay: false, sendRpc: true);
+			character.shakeCamera(sendRpc: true);
+		}
+		if (!character.grounded)
+		{
+			airCode();
+		}
+		if (character.isAnimOver())
+		{
+			if (character.grounded)
+			{
+				character.changeState(new Idle(), forceChange: true);
+			}
+			else
+			{
+				character.changeState(new Fall(), forceChange: true);
+			}
+		}
+	}
 
-            if (character.isAnimOver())
-            {
-                character.changeToIdleOrFall();
-            }
-        }
+	public override void onEnter(CharState oldState)
+	{
+		base.onEnter(oldState);
+	}
 
-        public override void onEnter(CharState oldState)
-        {
-            base.onEnter(oldState);
-            //character.frameIndex = 2;
-        }
+	public override void onExit(CharState newState)
+	{
+		base.onExit(newState);
+		character.parryCooldown = 0;
+	}
+}
 
-        public override void onExit(CharState newState)
-        {
-            base.onExit(newState);
-            character.parryCooldown = character.maxParryCooldown;
-        }
-    }
 
     public class AbsorbWeapon : Weapon
     {
@@ -248,91 +256,105 @@ namespace MMXOnline
             }
         }
     }
-
     public class XUPParryProjState : CharState
-    {
-        Projectile otherProj;
-        Anim absorbAnim;
-        bool shootProj;
-        bool absorbThenShoot;
-        public XUPParryProjState(Projectile otherProj, bool shootProj, bool absorbThenShoot) : base("unpo_parry_attack", "", "", "")
-        {
-            this.otherProj = otherProj;
-            invincible = true;
-            this.shootProj = shootProj;
-            this.absorbThenShoot = absorbThenShoot;
-        }
+{
+	private Projectile otherProj;
 
-        public override void update()
-        {
-            base.update();
+	private Anim absorbAnim;
 
-            if (!shootProj && character.sprite.frameIndex >= 1)
-            {
-                character.sprite.frameIndex = 1;
-                character.sprite.frameSpeed = 0;
-            }
+	private bool shootProj;
 
-            if (absorbAnim != null)
-            {
-                absorbAnim.moveToPos(character.getFirstPOIOrDefault(), 350);
-                absorbAnim.xScale -= Global.spf * 5;
-                absorbAnim.yScale -= Global.spf * 5;
-                if (absorbAnim.xScale <= 0)
-                {
-                    absorbAnim.destroySelf();
-                    absorbAnim = null;
-                    if (!shootProj)
-                    {
-                        character.changeToIdleOrFall();
-                        return;
-                    }
-                }
-            }
+	private bool absorbThenShoot;
 
-            Point? shootPos = character.getFirstPOI("proj");
-            if (!once && shootPos != null)
-            {
-                once = true;
-                float damage = Math.Max(otherProj.damager.damage * 2, 4);
-                //int flinch = otherProj.damager.flinch;
-                int flinch = Global.defFlinch;
-                float hitCooldown = otherProj.damager.hitCooldown;
-                new UPParryRangedProj(new XUPParry(), shootPos.Value, character.xDir, otherProj.sprite.name, damage, flinch, hitCooldown, player, player.getNextActorNetId(), rpc: true);
-            }
+	private bool grounded;
 
-            if (character.isAnimOver())
-            {
-                character.changeToIdleOrFall();
-            }
-        }
+	public XUPParryProjState(bool grounded, Projectile otherProj, bool shootProj, bool absorbThenShoot)
+		: base(grounded ? "unpo_parry_shot" : "unpo_parry_air_shot", "", "", "")
+	{
+		this.otherProj = otherProj;
+		invincible = true;
+		this.shootProj = shootProj;
+		this.absorbThenShoot = absorbThenShoot;
+		this.grounded = grounded;
+		landSprite = "unpo_parry_shot";
+	}
 
-        public override void onEnter(CharState oldState)
-        {
-            base.onEnter(oldState);
-            if (!shootProj || absorbThenShoot)
-            {
-                absorbAnim = new Anim(otherProj.pos, otherProj.sprite.name, otherProj.xDir, player.getNextActorNetId(), false, sendRpc: true);
-                absorbAnim.syncScale = true;
-            }
-        }
+	public override void update()
+	{
+		base.update();
+		if (character.sprite.frameIndex >= 0 && !shootProj)
+		{
+			character.sprite.frameIndex = 0;
+			character.sprite.frameSpeed = 0f;
+		}
+		if (absorbAnim != null)
+		{
+			absorbAnim.moveToPos(character.getFirstPOIOrDefault(), 350f);
+			absorbAnim.xScale -= Global.spf * 5f;
+			absorbAnim.yScale -= Global.spf * 5f;
+			if (absorbAnim.xScale <= 0f)
+			{
+				absorbAnim.destroySelf();
+				absorbAnim = null;
+				if (!shootProj)
+				{
+					character.changeToIdleOrFall();
+					return;
+				}
+			}
+		}
+		Point? shootPos = character.getFirstPOI("proj");
+		if (!once && shootPos.HasValue)
+		{
+			once = true;
+			float damage = Math.Max(otherProj.damager.damage * 2f, 4f);
+			int flinch = 26;
+			float hitCooldown = otherProj.damager.hitCooldown;
+			new UPParryRangedProj(new XUPParry(), shootPos.Value, character.xDir, otherProj.sprite.name, damage, flinch, hitCooldown, base.player, base.player.getNextActorNetId(), rpc: true);
+		}
+		if (!character.grounded)
+		{
+			airCode();
+		}
+		if (character.isAnimOver())
+		{
+			if (character.grounded)
+			{
+				character.changeState(new Idle(), forceChange: true);
+			}
+			else
+			{
+				character.changeState(new Fall(), forceChange: true);
+			}
+		}
+	}
 
-        public override void onExit(CharState newState)
-        {
-            base.onExit(newState);
-            absorbAnim?.destroySelf();
-            character.parryCooldown = character.maxParryCooldown;
-        }
-    }
+	public override void onEnter(CharState oldState)
+	{
+		base.onEnter(oldState);
+		if (!shootProj || absorbThenShoot)
+		{
+			absorbAnim = new Anim(otherProj.pos, otherProj.sprite.name, otherProj.xDir, base.player.getNextActorNetId(), destroyOnEnd: false, sendRpc: true);
+			absorbAnim.syncScale = true;
+		}
+	}
+
+	public override void onExit(CharState newState)
+	{
+		base.onExit(newState);
+		absorbAnim?.destroySelf();
+		character.parryCooldown = 0;
+	}
+}
 
     public class XUPPunch : Weapon
     {
         public XUPPunch(Player player) : base()
         {
-            rateOfFire = 0.75f;
+            rateOfFire = 0.25f;
             index = (int)WeaponIds.UPPunch;
             killFeedIndex = 167;
-            damager = new Damager(player, 3, Global.defFlinch, 0.5f);
+            damager = new Damager(player, 3, Global.defFlinch, 0.25f);
         }
     }
 
@@ -370,7 +392,186 @@ namespace MMXOnline
             }
         }
     }
+public class XUPPunchCharged : Weapon
+{
+	public XUPPunchCharged(Player player)
+	{
+		rateOfFire = 0.25f;
+		index = 33;
+		killFeedIndex = 167;
+		damager = new Damager(player, 4f, 26, 0.25f);
+	}
+}
+public class XUPPunchChargedState : CharState
+{
+	public float dustTime;
 
+	public float dashTime;
+
+
+	public XUPPunchChargedState()
+		: base("unpo_punch2", "")
+	{
+		enterSound = "speedBurnerCharged";
+	}
+
+	public override void onEnter(CharState oldState)
+	{
+		base.onEnter(oldState);
+		character.isDashing = true;
+		character.useGravity = false;
+	}
+
+	public override void onExit(CharState newState)
+	{
+		base.onExit(newState);
+		character.useGravity = true;
+	}
+
+	public override void update()
+	{
+		base.update();
+		if (base.player == null)
+		{
+			return;
+		}
+		character.move(new Point(character.xDir * 450, 0f));
+		dashTime += Global.spf;
+		if ((double)dashTime > 0.3)
+		{
+			character.changeState(new Idle());
+			return;
+		}
+		dustTime += Global.spf;
+		if ((double)dustTime > 0.1)
+		{
+			dustTime = 0f;
+			new Anim(character.pos.addxy(0f, -4f), "dust", character.xDir, base.player.getNextActorNetId(), destroyOnEnd: true, sendRpc: true);
+		}
+		
+    }
+	
+}
+    public class KickCharge : Weapon
+{
+	public KickCharge(Player player)
+	{
+		rateOfFire = 0.75f;
+		index = 33;
+		killFeedIndex = 167;
+		damager = new Damager(player, 3f, 13, 1f);
+	}
+}
+    public class KickChargeState : CharState
+{
+    public float dashTime;
+
+	public float dustTime;
+
+
+	public KickChargeState()
+		: base("unpo_slide", "")
+	{
+		enterSound = "fsplasher";
+	}
+
+	public override void onEnter(CharState oldState)
+	{
+		base.onEnter(oldState);
+		character.isDashing = true;
+	}
+
+	public override void onExit(CharState newState)
+	{
+		base.onExit(newState);
+		character.useGravity = true;
+	}
+
+	public override void update()
+	{
+		base.update();
+		if (base.player == null)
+		{
+			return;
+		}
+		character.move(new Point(character.xDir * 250, 0f));
+		dashTime += Global.spf;
+		if ((double)dashTime > 0.6)
+		{
+			character.changeState(new Idle());
+			return;
+		}
+		dustTime += Global.spf;
+		if ((double)dustTime > 0.1)
+		{
+			dustTime = 0f;
+			new Anim(character.pos.addxy(0f, -4f), "dust", character.xDir, base.player.getNextActorNetId(), destroyOnEnd: true, sendRpc: true);
+		}
+        if (player.input.isPressed(Control.Jump, player) && dashTime > 0.2)
+        {
+            character.changeState(new Idle());
+			return;
+        }
+        if (player.input.isPressed(Control.WeaponLeft, player) && dashTime > 0.15)
+        {
+            character.changeState(new Idle());
+			return;
+        }
+        if (player.input.isPressed(Control.WeaponRight, player) && dashTime > 0.15)
+        {
+            character.changeState(new Idle());
+			return;
+        }
+		
+    }
+	
+}
+    public class UnlimitedCrush : Weapon
+{
+	public UnlimitedCrush(Player player)
+	{
+		rateOfFire = 0.1f;
+		index = 25;
+		killFeedIndex = 167;
+		damager = new Damager(player, 1f, 26, 0.5f);
+	}
+}
+    public class UnlimitedCrushState : CharState
+{
+	public float GigaTime;
+
+	public UnlimitedCrushState()
+		: base("unpo_gigga", "", "", "")
+	{
+		enterSound = "gigaCrushLate";
+		invincible = true;
+	}
+
+	public override void update()
+	{
+		base.update();
+		if (base.player != null)
+		{
+			GigaTime += Global.spf;
+			if ((double)GigaTime > 0.5)
+			{
+				character.changeState(new Idle());
+			}
+		}
+	}
+
+	public override void onEnter(CharState oldState)
+	{
+		base.onEnter(oldState);
+		base.player.character.useGravity = true;
+	}
+
+	public override void onExit(CharState newState)
+	{
+		base.onExit(newState);
+		base.player.character.useGravity = true;
+	}
+}
     public class XUPGrab : Weapon
     {
         public XUPGrab() : base()
@@ -419,7 +620,7 @@ namespace MMXOnline
                 }
                 if (character.isDefenderFavored())
                 {
-                    if (leechTime > 0.33f)
+                    if (leechTime > 0.27f)
                     {
                         leechTime = 0;
                         character.addHealth(1);
@@ -443,7 +644,7 @@ namespace MMXOnline
                 }
             }
 
-            if (leechTime > 0.33f)
+            if (leechTime > 0.27f)
             {
                 leechTime = 0;
                 character.addHealth(1);
@@ -482,7 +683,7 @@ namespace MMXOnline
 
     public class UPGrabbed : CharState
     {
-        public const float maxGrabTime = 4;
+        public const float maxGrabTime = 10;
         public Character grabber;
         public long savedZIndex;
         public UPGrabbed(Character grabber) : base("grabbed")
@@ -508,7 +709,7 @@ namespace MMXOnline
         public override void onExit(CharState newState)
         {
             base.onExit(newState);
-            character.grabInvulnTime = 2;
+            character.grabInvulnTime = 1.7f;
             character.setzIndex(savedZIndex);
         }
 
@@ -698,16 +899,7 @@ namespace MMXOnline
                 drLightAnim.frameSpeed = 0;
                 drLightAnim.frameIndex = 0;
             }
-
-            if (stateTime > 2) character.unpoShotCount = Math.Max(character.unpoShotCount, 1);
-            if (stateTime > 3.75f) character.unpoShotCount = Math.Max(character.unpoShotCount, 2);
-            if (stateTime > 5.75f) character.unpoShotCount = Math.Max(character.unpoShotCount, 3);
-
-            if (stateTime > 7.75f)
-            {
-                character.unpoShotCount = Math.Max(character.unpoShotCount, 4);
-                character.changeState(new XRevive(), true);
-            }
+            
         }
 
         public override void onEnter(CharState oldState)

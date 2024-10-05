@@ -22,7 +22,7 @@ namespace MMXOnline
         {
             damager = new Damager(player, 4, Global.defFlinch, 0.5f);
             ammo = 0;
-            rateOfFire = 1;
+            rateOfFire = 1.5f;
             index = (int)WeaponIds.Rakuhouha;
             weaponBarBaseIndex = 27;
             weaponBarIndex = 33;
@@ -389,7 +389,7 @@ namespace MMXOnline
     public class RekkohaProj : Projectile
     {
         float len = 0;
-        public RekkohaProj(Weapon weapon, Point pos, Player player, ushort netProjId, bool rpc = false) : base(weapon, pos, 1, 0, 3, player, "rekkoha_proj", Global.defFlinch, 0.5f, netProjId, player.ownedByLocalPlayer)
+        public RekkohaProj(Weapon weapon, Point pos, Player player, ushort netProjId, bool rpc = false) : base(weapon, pos, 1, 0, 4, player, "rekkoha_proj", Global.defFlinch, 0.5f, netProjId, player.ownedByLocalPlayer)
         {
             projId = (int)ProjIds.Rekkoha;
             vel.y = 400;
@@ -592,7 +592,7 @@ namespace MMXOnline
     public class DarkHoldState : CharState
     {
         public float stunTime = totalStunTime;
-        public const float totalStunTime = 5;
+        public const float totalStunTime = 10;
         int frameIndex;
         public bool shouldDrawAxlArm;
         public float lastArmAngle;

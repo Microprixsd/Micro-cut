@@ -346,7 +346,7 @@ namespace MMXOnline
                 float ammoUsage;
                 if (player.character.isInvisibleBS.getValue() && chargeLevel != 3)
                 {
-                    ammoUsage = 4;
+                    ammoUsage = 1;
                 }
                 else if (this is FireWave)
                 {
@@ -355,11 +355,11 @@ namespace MMXOnline
                         float chargeTime = player.character.chargeTime;
                         if (chargeTime < 1)
                         {
-                            ammoUsage = Global.spf * 10;
+                            ammoUsage = Global.spf * 6;
                         }
                         else
                         {
-                            ammoUsage = Global.spf * 20;
+                            ammoUsage = Global.spf * 6;
                         }
                     }
                     else
@@ -390,7 +390,7 @@ namespace MMXOnline
 
         public void addAmmo(float amount, Player player)
         {
-            if (player.isX && player.hasChip(3) && amount < 0) amount *= 0.5f;
+            if (player.isX && player.hasChip(3) && amount < 0 && this is not HyperBuster) amount *= 0.5f;
             ammo += amount;
             ammo = Helpers.clamp(ammo, 0, maxAmmo);
         }

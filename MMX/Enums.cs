@@ -699,5 +699,8 @@ namespace MMXOnline
         RideChaserCrash,
         DarkHold,
         KillZone,
+        KickCharge,
+        XUPPunchCharged,
+        UnlimitedCrush,
     }
 }

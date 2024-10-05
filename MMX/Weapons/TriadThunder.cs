@@ -11,18 +11,19 @@ namespace MMXOnline
         public TriadThunder() : base()
         {
             shootSounds = new List<string>() { "triadThunder", "triadThunder", "triadThunder", "" };
-            rateOfFire = 2.25f;
+            rateOfFire = 1.65f;
             index = (int)WeaponIds.TriadThunder;
             weaponBarBaseIndex = 19;
             weaponBarIndex = weaponBarBaseIndex;
             weaponSlotIndex = 19;
             killFeedIndex = 42;
+            switchCooldown = 0.25f;
             weaknessIndex = (int)WeaponIds.TunnelFang;
         }
 
         public override float getAmmoUsage(int chargeLevel)
         {
-            if (chargeLevel != 3) return 3;
+            if (chargeLevel != 3) return 2;
             return 8;
         }
 

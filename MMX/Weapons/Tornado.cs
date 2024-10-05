@@ -52,7 +52,7 @@ namespace MMXOnline
         public float blowModifier = 0.25f;
 
         public TornadoProj(Weapon weapon, Point pos, int xDir, bool isStormE, Player player, ushort netProjId, bool sendRpc = false) : 
-            base(weapon, pos, xDir, 400, 1, player, "tornado_mid", 0, 0.25f, netProjId, player.ownedByLocalPlayer)
+            base(weapon, pos, xDir, 400, 1, player, "tornado_mid", 0, 0.2f, netProjId, player.ownedByLocalPlayer)
         {
             projId = isStormE ? (int)ProjIds.StormETornado : (int)ProjIds.Tornado;
             if (isStormE)

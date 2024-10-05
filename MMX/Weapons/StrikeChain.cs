@@ -11,7 +11,7 @@ namespace MMXOnline
         public StrikeChain() : base()
         {
             shootSounds = new List<string>() { "strikeChain", "strikeChain", "strikeChain", "strikeChainCharged" };
-            rateOfFire = 0.75f;
+            rateOfFire = 1f;
             index = (int)WeaponIds.StrikeChain;
             weaponBarBaseIndex = 14;
             weaponBarIndex = weaponBarBaseIndex;
@@ -62,7 +62,7 @@ namespace MMXOnline
         public Point chainVel;
         public Actor anchorActor;
         public StrikeChainProj(Weapon weapon, Point pos, int xDir, int type, int upOrDown, Player player, ushort netProjId, bool rpc = false) : 
-            base(weapon, pos, xDir, 400, 2, player, xDir == 1 ? "strikechain_proj" : "strikechain_proj_left", 0, 0.5f, netProjId, player.ownedByLocalPlayer)
+            base(weapon, pos, xDir, 400, 3, player, xDir == 1 ? "strikechain_proj" : "strikechain_proj_left", 0, 0.5f, netProjId, player.ownedByLocalPlayer)
         {
             destroyOnHit = false;
             this.player = player;

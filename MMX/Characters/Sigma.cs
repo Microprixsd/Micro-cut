@@ -773,10 +773,10 @@ namespace MMXOnline
 
         public int getMaverickCost()
         {
-            if (player.isSummoner()) return 3;
-            if (player.isPuppeteer()) return 3;
+            if (player.isSummoner()) return 5;
+            if (player.isPuppeteer()) return 5;
             if (player.isStriker()) return 0;
-            if (player.isTagTeam()) return 5;
+            if (player.isTagTeam()) return 7;
             return 3;
         }
     }

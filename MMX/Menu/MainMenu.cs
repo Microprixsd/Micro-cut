@@ -251,7 +251,7 @@ namespace MMXOnline
             }
             else
             {
-                string versionText = "v" + Global.version;
+                string versionText = "v" + Global.version + "[Advance]";
                 /*
                 if (Helpers.compareVersions(Global.version, Global.serverVersion) == -1 && Global.serverVersion != decimal.MaxValue)
                 {
