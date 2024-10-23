@@ -78,7 +78,7 @@ namespace MMXOnline
         public List<int> ammoUsages = new List<int>();
 
         // Used to be 0.5, 100
-        public const float maxStealthRevealTime = 0.25f;
+        public const float maxStealthRevealTime = 1.1f;
         public const float stealthRevealPingDenom = 200;    // The ping divided by this number indicates stealth reveal time in online
 
         public void zoomIn()
@@ -735,7 +735,7 @@ namespace MMXOnline
 
                     if (player.weapon is SpiralMagnum && charState.canShoot())
                     {
-                        if (shootHeld && shootTime == 0 && player.axlWeapon.ammo >= 2)
+                        if (shootHeld && shootTime == 0 && player.axlWeapon.ammo >= 6)
                         {
                             if (!player.weapon.noAmmo())
                             {
@@ -755,7 +755,7 @@ namespace MMXOnline
                             }
                             else
                             {
-                                if (altShootPressed && (charState is Idle || charState is Crouch) && player.axlWeapon.ammo >= 6)
+                                if (altShootPressed && (charState is Idle || charState is Crouch))
                                 {
                                     if (!_zoom)
                                     {
