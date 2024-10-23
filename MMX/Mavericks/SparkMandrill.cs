@@ -115,6 +115,14 @@ namespace MMXOnline
             };
             return attacks.GetRandomItem();
         }
+        public float getStompDamage()
+        {
+            float damagePercent = 0;
+            if (deltaPos.y > 150 * Global.spf) damagePercent = 0.5f;
+            if (deltaPos.y > 225 * Global.spf) damagePercent = 0.75f;
+            if (deltaPos.y > 300 * Global.spf) damagePercent = 1;
+            return damagePercent;
+        }
 
         public override Projectile getProjFromHitbox(Collider hitbox, Point centerPoint)
         {
@@ -128,16 +136,24 @@ namespace MMXOnline
             }
             if (sprite.name.Contains("fall"))
             {
-                float damagePercent = 0;
-                if (deltaPos.y > 100 * Global.spf) damagePercent = 0.5f;
-                if (deltaPos.y > 200 * Global.spf) damagePercent = 0.75f;
-                if (deltaPos.y > 300 * Global.spf) damagePercent = 1;
+                float damagePercent = getStompDamage();
                 if (damagePercent > 0)
                 {
-                    return new GenericMeleeProj(stompWeapon, centerPoint, ProjIds.GBeetleStomp, player, damage: stompWeapon.damager.damage * damagePercent);
+                    return new GenericMeleeProj(stompWeapon, centerPoint, ProjIds.SparkMStomp, player, damage: 4 * damagePercent, flinch: Global.defFlinch, hitCooldown: 0.5f);
                 }
             }
             return null;
+        }
+        public override void updateProjFromHitbox(Projectile proj)
+        {
+            if (sprite.name.EndsWith("fall"))
+            {
+                float damagePercent = getStompDamage();
+                if (damagePercent > 0)
+                {
+                    proj.damager.damage = 4 * damagePercent;
+                }
+            }
         }
     }
 
