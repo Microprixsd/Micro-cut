@@ -13,8 +13,8 @@ namespace MMXOnline
         public PlasmaGun(int altFire) : base(altFire)
         {
             shootSounds = new List<string>() { "plasmaGun", "plasmaGun", "plasmaGun", "plasmaGun" };
-            rateOfFire = 1.5f;
-            altFireCooldown = 2f;
+            rateOfFire = 2.5f;
+            altFireCooldown = 2.5f;
             index = (int)WeaponIds.PlasmaGun;
             weaponBarBaseIndex = 36;
             weaponSlotIndex = 56;
@@ -40,10 +40,15 @@ namespace MMXOnline
             }
             return 4;
         }
+        public override void update()
+        {
+            base.update();
+            rechargeAmmo(1);
+        }
 
         public override float whiteAxlFireRateMod()
         {
-            return 2;
+            return 1.5f;
         }
 
         public override void axlGetProjectile(Weapon weapon, Point bulletPos, int xDir, Player player, float angle, IDamagable target, Character headshotTarget, Point cursorPos, int chargeLevel, ushort netId)
@@ -115,7 +120,7 @@ namespace MMXOnline
     public class PlasmaGunAltProj : Projectile
     {
         Player player;
-        const float range = 100;
+        const float range = 88;
         float soundCooldown;
         bool hasTarget;
         SoundWrapper sound;

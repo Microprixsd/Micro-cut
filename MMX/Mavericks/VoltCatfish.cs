@@ -199,7 +199,7 @@ namespace MMXOnline
             shouldShieldBlock = false;
             vel = velDir.normalize().times(150);
             collider.wallOnly = true;
-            maxTime = 1.75f;
+            maxTime = 2.5f;
             this.vc = vc;
 
             if (rpc)
@@ -516,7 +516,7 @@ namespace MMXOnline
             projId = (int)ProjIds.VoltCSparkle;
             vel = new Point(Helpers.randomRange(-200, 200), Helpers.randomRange(-400, -200));
             useGravity = true;
-            maxTime = 0.75f;
+            maxTime = 1.25f;
 
             if (rpc)
             {
@@ -533,7 +533,7 @@ namespace MMXOnline
         VoltCChargeProj chargeProj2;
         VoltCBarrierProj barrierProj1;
         VoltCBarrierProj barrierProj2;
-        const float drainAmmoRate = 6;
+        const float drainAmmoRate = 4;
         public VoltCSpecialState() : base("charge_start", "")
         {
             superArmor = true;

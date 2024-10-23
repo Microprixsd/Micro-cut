@@ -95,6 +95,14 @@ namespace MMXOnline
         {
             return 85;
         }
+        public float getStompDamage()
+        {
+            float damagePercent = 0;
+            if (deltaPos.y > 150 * Global.spf) damagePercent = 0.5f;
+            if (deltaPos.y > 225 * Global.spf) damagePercent = 0.75f;
+            if (deltaPos.y > 300 * Global.spf) damagePercent = 1;
+            return damagePercent;
+        }
 
         public override List<ShaderWrapper> getShaders()
         {
@@ -121,7 +129,7 @@ namespace MMXOnline
                 }
                 else
                 {
-                    return new GenericMeleeProj(weapon, centerPoint, ProjIds.WheelGBite, player, damage: 6, flinch: Global.defFlinch, hitCooldown: 0.5f, owningActor: this);
+                    return new GenericMeleeProj(weapon, centerPoint, ProjIds.WheelGBite, player, damage: 4, flinch: Global.defFlinch, hitCooldown: 0.5f, owningActor: this);
                 }
             }
             if (sprite.name.Contains("grab_start") && deltaPos.y <= 0)
@@ -130,16 +138,24 @@ namespace MMXOnline
             }
             if (sprite.name.Contains("fall"))
             {
-                float damagePercent = 0;
-                if (deltaPos.y > 100 * Global.spf) damagePercent = 0.5f;
-                if (deltaPos.y > 200 * Global.spf) damagePercent = 0.75f;
-                if (deltaPos.y > 300 * Global.spf) damagePercent = 1;
+                float damagePercent = getStompDamage();
                 if (damagePercent > 0)
                 {
-                    return new GenericMeleeProj(weapon, centerPoint, ProjIds.WheelGStomp, player, damage: 4 * damagePercent, flinch: Global.defFlinch, hitCooldown: 1);
+                    return new GenericMeleeProj(weapon, centerPoint, ProjIds.WheelGStomp, player, damage: 4 * damagePercent, flinch: Global.defFlinch, hitCooldown: 0.5f);
                 }
             }
             return null;
+        }
+        public override void updateProjFromHitbox(Projectile proj)
+        {
+            if (sprite.name.EndsWith("fall"))
+            {
+                float damagePercent = getStompDamage();
+                if (damagePercent > 0)
+                {
+                    proj.damager.damage = 4 * damagePercent;
+                }
+            }
         }
 
         public override MaverickState[] aiAttackStates()

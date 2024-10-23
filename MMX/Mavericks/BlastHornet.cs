@@ -154,7 +154,7 @@ namespace MMXOnline
         {
             if (sprite.name.EndsWith("_stinger_attack"))
             {
-                return new GenericMeleeProj(weapon, centerPoint, ProjIds.BHornetSting, player, damage: 7, flinch: Global.defFlinch, hitCooldown: 0.5f, owningActor: this);
+                return new GenericMeleeProj(weapon, centerPoint, ProjIds.BHornetSting, player, damage: 5, flinch: Global.defFlinch, hitCooldown: 0.5f, owningActor: this);
             }
             return null;
         }
@@ -172,7 +172,7 @@ namespace MMXOnline
             this.weapon = weapon;
             fadeSprite = "explosion";
             fadeSound = "explosion";
-            maxTime = 1.25f;
+            maxTime = 1.5f;
             projId = (int)ProjIds.BHornetBee;
             destroyOnHit = false;
             shouldShieldBlock = true;

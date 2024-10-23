@@ -246,7 +246,7 @@ namespace MMXOnline
                 //else if (projId == (int)ProjIds.TSeahorsePuddle) damagerMessage = onAcidDamage(damagable, owner, 1);
                 //else if (projId == (int)ProjIds.TSeahorseEmerge) damagerMessage = onAcidDamage(damagable, owner, 2);
                 else if (projId == (int)ProjIds.ParasiticBomb) damagerMessage = onParasiticBombDamage(damagable, owner);
-                else if (projId == (int)ProjIds.StunShot || projId == (int)ProjIds.MK2StunShot || projId == (int)ProjIds.MorphMPowder) damagerMessage = onStunShotDamage(damagable, owner);
+                else if (projId == (int)ProjIds.StunShot || projId == (int)ProjIds.MK2StunShot || projId == (int)ProjIds.MorphMPowder || projId == (int)ProjIds.AssassinBullet && damage >= 8|| projId == (int)ProjIds.AssassinBulletQuick && damage >= 8) damagerMessage = onStunShotDamage(damagable, owner);
 
                 if (damagerMessage?.flinch != null) flinch = damagerMessage.flinch.Value;
                 if (damagerMessage?.damage != null) damage = damagerMessage.damage.Value;
@@ -339,13 +339,13 @@ namespace MMXOnline
                 else if (projId == (int)ProjIds.QuakeBlazer) character.addBurnTime(owner, new QuakeBlazerWeapon(null), 0.5f);
                 else if (projId == (int)ProjIds.QuakeBlazerFlame) character.addBurnTime(owner, new QuakeBlazerWeapon(null), 0.5f);
                 else if (projId == (int)ProjIds.FlameMFireball) character.addBurnTime(owner, new FlameMFireballWeapon(), 1);
-                else if (projId == (int)ProjIds.FlameMOilFire) character.addBurnTime(owner, new FlameMOilFireWeapon(), 8);
+                else if (projId == (int)ProjIds.FlameMOilFire) character.addBurnTime(owner, new FlameMOilFireWeapon(), 6);
                 else if (projId == (int)ProjIds.VelGFire) character.addBurnTime(owner, new VelGFireWeapon(), 0.5f);
                 else if (projId == (int)ProjIds.SigmaWolfHeadFlameProj) character.addBurnTime(owner, new WolfSigmaHeadWeapon(), 3);
                 else if (projId == (int)ProjIds.WildHorseKick) character.addBurnTime(owner, new VileFlamethrower(VileFlamethrowerType.WildHorseKick), 0.5f);
                 else if (projId == (int)ProjIds.FStagFireball) character.addBurnTime(owner, FlameStag.getWeapon(), 1f);
                 else if (projId == (int)ProjIds.FStagDash) character.addBurnTime(owner, FlameStag.getUppercutWeapon(null), 2f);
-                else if (projId == (int)ProjIds.DrDopplerDash) character.addBurnTime(owner, new Weapon(WeaponIds.DrDopplerGeneric, 156), 1f);
+                else if (projId == (int)ProjIds.DrDopplerDash) character.addBurnTime(owner, new Weapon(WeaponIds.DrDopplerGeneric, 156), 2f);
                 else if (projId == (int)ProjIds.Sigma3Fire) character.addBurnTime(owner, new Sigma3FireWeapon(), 0.5f);
 
                 // Other effects
@@ -377,11 +377,6 @@ namespace MMXOnline
                 else if (projId == (int)ProjIds.BBuffaloBeam)
                 {
                     character.freeze(2);
-                }
-                else if (projId == (int)ProjIds.PlasmaGun)
-                {
-                    character.barrierCooldown = 3;
-                    character.barrierTime = 0;
                 }
                 else if (projId == (int)ProjIds.ShotgunIceCharged)
                 {
@@ -551,7 +546,7 @@ namespace MMXOnline
                         if (playHurtSound || weaponKillFeedIndex == 18 ||
                             (projId == (int)ProjIds.BlackArrow && damage > 1) ||
                             ((projId == (int)ProjIds.SpiralMagnum || projId == (int)ProjIds.SpiralMagnumScoped) && damage > 2) ||
-                            ((projId == (int)ProjIds.AssassinBullet || projId == (int)ProjIds.AssassinBulletQuick) && damage > 8))
+                            ((projId == (int)ProjIds.AssassinBullet || projId == (int)ProjIds.AssassinBulletQuick) && damage >= 8))
                         {
                             victim?.playSound("hurt");
                         }
@@ -780,7 +775,6 @@ namespace MMXOnline
                 projId == (int)ProjIds.VoltTornadoHyper ||
                 projId == (int)ProjIds.Sigma2Ball ||
                 projId == (int)ProjIds.VoltCTriadThunder ||
-                projId == (int)ProjIds.DrDopplerBall ||
                 projId == (int)ProjIds.CopyShot;
         }
 

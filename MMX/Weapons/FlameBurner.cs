@@ -11,7 +11,7 @@ namespace MMXOnline
         public FlameBurner(int altFire) : base(altFire)
         {
             shootSounds = new List<string>() { "flameBurner", "flameBurner", "flameBurner", "circleBlaze" };
-            rateOfFire = 0.075f;
+            rateOfFire = 0.09f;
             altFireCooldown = 1.5f;
             index = (int)WeaponIds.FlameBurner;
             weaponBarBaseIndex = 38;
@@ -38,6 +38,11 @@ namespace MMXOnline
                 return 4;
             }
             return 0.5f;
+        }
+        public override void update()
+        {
+            base.update();
+            rechargeAmmo(0.5f);
         }
 
         public override void axlGetProjectile(Weapon weapon, Point bulletPos, int xDir, Player player, float angle, IDamagable target, Character headshotTarget, Point cursorPos, int chargeLevel, ushort netId)
@@ -75,7 +80,7 @@ namespace MMXOnline
     {
         bool hitWall;
         public FlameBurnerProj(Weapon weapon, Point pos, int xDir, Player player, Point bulletDir, ushort netProjId, bool sendRpc = false) : 
-            base(weapon, pos, xDir, 150, 1, player, "flameburner_proj", 0, 0.2f, netProjId, player.ownedByLocalPlayer)
+            base(weapon, pos, xDir, 150, 1, player, "flameburner_proj", 0, 0.25f, netProjId, player.ownedByLocalPlayer)
         {
             projId = (int)ProjIds.FlameBurner;
             maxTime = 0.5f;

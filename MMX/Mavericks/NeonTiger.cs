@@ -152,7 +152,7 @@
             base(weapon, pos, xDir, 0, 2, player, "neont_projectile_start", 0, 0.01f, netProjId, player.ownedByLocalPlayer)
         {
             projId = (int)ProjIds.NeonTRaySplasher;
-            maxTime = 0.875f;
+            maxTime = 0.95f;
             this.shootNum = shootNum;
             this.isHanging = isHanging;
 

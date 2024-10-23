@@ -154,7 +154,7 @@ namespace MMXOnline
         public float sinDampTime = 1;
         public Anim muzzle;
         public RisingSpecterProj(Weapon weapon, Point poi, int xDir, Player player, ushort netProjId, bool rpc = false) :
-            base(weapon, poi, xDir, 0, 6, player, "empty", Global.defFlinch, 0.5f, netProjId, player.ownedByLocalPlayer)
+            base(weapon, poi, xDir, 0, 5, player, "empty", Global.defFlinch, 0.5f, netProjId, player.ownedByLocalPlayer)
         {
             maxTime = 0.5f;
             destroyOnHit = false;
@@ -176,8 +176,8 @@ namespace MMXOnline
             var points = new List<Point>();
             if (xDir == 1)
             {
-                float sideY = 30 * Helpers.cosd(ang);
-                float sideX = -30 * Helpers.sind(ang);
+                float sideY = 20 * Helpers.cosd(ang);
+                float sideX = -20 * Helpers.sind(ang);
                 points.Add(new Point(poi.x - sideX, poi.y - sideY));
                 points.Add(new Point(destPos.x - sideX, destPos.y - sideY));
                 points.Add(new Point(destPos.x + sideX, destPos.y + sideY));
@@ -185,8 +185,8 @@ namespace MMXOnline
             }
             else
             {
-                float sideY = 30 * Helpers.cosd(ang);
-                float sideX = 30 * Helpers.sind(ang);
+                float sideY = 20 * Helpers.cosd(ang);
+                float sideX = 20 * Helpers.sind(ang);
                 points.Add(new Point(destPos.x - sideX, destPos.y + sideY));
                 points.Add(new Point(destPos.x + sideX, destPos.y - sideY));
                 points.Add(new Point(poi.x + sideX, poi.y - sideY));

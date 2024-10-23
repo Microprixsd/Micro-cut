@@ -1,6 +1,7 @@
 ﻿using SFML.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,7 +11,6 @@ namespace MMXOnline
     public class RayGun : AxlWeapon
     {
         public int laserChargeLevel;
-
         public RayGun(int altFire) : base(altFire)
         {
             sprite = "axl_arm_raygun";
@@ -22,7 +22,7 @@ namespace MMXOnline
             weaponBarIndex = 28;
             weaponSlotIndex = 34;
             killFeedIndex = 33;
-            rateOfFire = 0.1f;
+            rateOfFire = 0.135f;
 
             if (altFire == 1)
             {
@@ -32,7 +32,7 @@ namespace MMXOnline
 
         public override float whiteAxlFireRateMod()
         {
-            return 1.5f;
+            return 1.2f;
         }
 
         public override float whiteAxlAmmoMod()
@@ -50,16 +50,22 @@ namespace MMXOnline
             {
                 if (altFire == 1)
                 {
-                    if (laserChargeLevel == 0) return 0.1f;
-                    else if (laserChargeLevel == 1) return 0.25f;
+                    if (laserChargeLevel == 0) return 0.25f;
+                    else if (laserChargeLevel == 1) return 1f;
                     else return 1f;
                 }
                 else
                 {
-                    return 0.5f;
+                    return 1f;
                 }
             }
         }
+         public override void update()
+        {
+            base.update();
+            rechargeAmmo(0.5f);            
+        }
+        
 
         public override void axlGetProjectile(Weapon weapon, Point bulletPos, int xDir, Player player, float angle, IDamagable target, Character headshotTarget, Point cursorPos, int chargeLevel, ushort netId)
         {
@@ -110,7 +116,7 @@ namespace MMXOnline
         float lastAngle;
         const float maxLen = 50;
         public RayGunProj(Weapon weapon, Point pos, int xDir, Player player, Point bulletDir, ushort netProjId) : 
-            base(weapon, pos, xDir, 400, 1, player, "axl_raygun_laser", 0, 0f, netProjId, player.ownedByLocalPlayer)
+            base(weapon, pos, xDir, 400, 1, player, "axl_raygun_laser", 0, 0, netProjId, player.ownedByLocalPlayer)
         {
             reflectable = true;
             if (player?.character?.isWhiteAxl() == true)
@@ -218,7 +224,7 @@ namespace MMXOnline
         float chargeTime;
         float chargeDecreaseCooldown;
         public RayGunAltProj(Weapon weapon, Point pos, Point cursorPos, int xDir, Player player, ushort netProjId) :
-            base(weapon, pos, xDir, 0, 1, player, "axl_raygun_laser", 0, 0.33f, netProjId, player.ownedByLocalPlayer)
+            base(weapon, pos, xDir, 0, 1, player, "axl_raygun_laser", 0, 0.18f, netProjId, player.ownedByLocalPlayer)
         {
             projId = (int)ProjIds.RayGun2;
             destroyOnHit = false;
@@ -353,7 +359,7 @@ namespace MMXOnline
             else if (getChargeLevel() == 1)
             {
                 damager.damage = 2;
-                damager.hitCooldown = 0.15f;
+                damager.hitCooldown = 0.33f;
                 angle = 90;
             }
             else if (getChargeLevel() == 2)

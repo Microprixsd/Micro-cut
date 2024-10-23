@@ -130,7 +130,7 @@ namespace MMXOnline
         public bool lastDeathWasXHyper;
         public const int reviveVileScrapCost = 5;
         public const int zeroHyperCost = 10;
-        public const int zBusterZeroHyperCost = 5;
+        public const int zBusterZeroHyperCost = 10;
         public const int goldenArmorCost = 5;
         public const int ultimateArmorCost = 10;
         public const int reviveSigmaScrapCost = 10;
@@ -605,10 +605,10 @@ namespace MMXOnline
             if (!Global.level.is1v1() && isTagTeam())
             {
                 //return 16 + (heartTanks * getHeartTankModifier());
-                return 24 * getHealthModifier();
+                return 32 * getHealthModifier();
             }
             
-            return 24 * getHealthModifier();
+            return 28 * getHealthModifier();
         }
 
         public bool hasAllItems()
@@ -657,7 +657,7 @@ namespace MMXOnline
                 return 32 * getHealthModifier();
             }
             int bonus = 0;
-            if (isSigma && isPuppeteer()) bonus = 4;
+            if (isSigma && isPuppeteer()) bonus = 2;
             return (16 + bonus + (heartTanks * getHeartTankModifier())) * getHealthModifier();
         }
 
@@ -1609,9 +1609,9 @@ namespace MMXOnline
             //if (isX && hasGoldenArmor()) return;
             if (Global.level.is1v1()) return;
 
-            if (isZero || isVile) fillSubtank(2);
-            if (isAxl) fillSubtank(3);
-            if (isX || isSigma) fillSubtank(4);
+            if (isZero || isSigma) fillSubtank(2);
+            if (isVile) fillSubtank(3);
+            if (isX || isAxl) fillSubtank(4);
 
             scrap++;
         }

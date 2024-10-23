@@ -5,7 +5,7 @@ namespace MMXOnline
     public class GravityBeetle : Maverick
     {
         public static Weapon getWeapon() { return new Weapon(WeaponIds.GravityBeetle, 157); }
-        public static Weapon getMeleeWeapon(Player player) { return new Weapon(WeaponIds.GravityBeetle, 157, new Damager(player, 6, Global.defFlinch, 0.5f)); }
+        public static Weapon getMeleeWeapon(Player player) { return new Weapon(WeaponIds.GravityBeetle, 157, new Damager(player, 5, Global.defFlinch, 0.5f)); }
 
         public Weapon meleeWeapon;
         public GBeetleGravityWellProj well;

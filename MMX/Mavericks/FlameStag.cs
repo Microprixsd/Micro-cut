@@ -680,7 +680,7 @@ namespace MMXOnline
             if (getVictim() != null)
             {
                 (maverick as FlameStag).uppercutWeapon.applyDamage(victim, false, maverick, (int)ProjIds.FStagUppercut, 
-                    overrideDamage: isCeiling ? 3 : 5, overrideFlinch: isCeiling ? 0 : Global.defFlinch, sendRpc: true);
+                    overrideDamage: isCeiling ? 3 : 3, overrideFlinch: isCeiling ? 0 : Global.defFlinch, sendRpc: true);
             }
             maverick.playSound("crash", sendRpc: true);
             maverick.shakeCamera(sendRpc: true);

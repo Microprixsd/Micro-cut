@@ -66,6 +66,11 @@ namespace MMXOnline
                 RPC.axlShoot.sendRpc(player.id, grenade.projId, netId, bulletPos, xDir, angle);
             }
         }
+        public override void update()
+        {
+            base.update();
+            rechargeAmmo(1);
+        }
     }
 
     public class GrenadeProj : Projectile, IDamagable
@@ -197,13 +202,13 @@ namespace MMXOnline
             }
         }
 
-        float health = 2;
+        float health = 4;
         public void applyDamage(Player owner, int? weaponIndex, float damage, int? projId)
         {
             if (type == 1)
             {
                 health -= damage;
-                if (health < 0)
+                if (health <= 0)
                 {
                     health = 0;
                     destroySelf();
@@ -253,7 +258,7 @@ namespace MMXOnline
             }
             if (type == 1)
             {
-                damager.damage = 4;
+                damager.damage = 3;
             }
             if (ownedByLocalPlayer)
             {

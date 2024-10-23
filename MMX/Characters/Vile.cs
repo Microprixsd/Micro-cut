@@ -359,7 +359,7 @@ namespace MMXOnline
                 if (isVileMK2 && (player.input.isPressed(Control.Special1, player)))
                 {
                     charState.isGrabbing = true;
-                    charState.superArmor = true;
+                    charState.superArmor = false;
                     changeSpriteFromName("dash_grab", true);
                 }
             }

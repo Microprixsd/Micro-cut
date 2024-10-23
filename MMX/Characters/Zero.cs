@@ -566,7 +566,7 @@ namespace MMXOnline
             else if (sprite.name == "zero_attack3")
             {
                 float timeSinceStart = zero3SwingComboEndTime - zero3SwingComboStartTime;
-                float overrideDamage = 4;
+                float overrideDamage = 3;
                 int overrideFlinch = Global.defFlinch;
                 if (timeSinceStart < 0.4f)
                 {
@@ -576,7 +576,7 @@ namespace MMXOnline
                 else if (timeSinceStart < 0.5f)
                 {
                     overrideDamage = 3;
-                    overrideFlinch = Global.defFlinch;
+                    overrideFlinch = Global.halfFlinch;
                 }
                 proj = new GenericMeleeProj(player.zSaberWeapon, centerPoint, ProjIds.ZSaber3, player, overrideDamage, overrideFlinch, 0.25f, isReflectShield: true);
             }
@@ -588,9 +588,10 @@ namespace MMXOnline
             else if (sprite.name == "zero_parry")
             {
                 proj = new GenericMeleeProj(new KKnuckleParry(), centerPoint, ProjIds.KKnuckleParry, player, 4, Global.defFlinch, 0.25f);
+                player.character.addHealth(0.5f);
             }
             else if (sprite.name == "zero_shoryuken") proj = new GenericMeleeProj(player.zeroUppercutWeaponA, centerPoint, ProjIds.KKnuckleShoryuken, player, 4, Global.defFlinch, 0.25f);
-            else if (sprite.name == "zero_megapunch") proj = new GenericMeleeProj(player.raijingekiWeapon, centerPoint, ProjIds.KKnuckleMegaPunch, player, 6, Global.defFlinch, 0.25f);
+            else if (sprite.name == "zero_megapunch") proj = new GenericMeleeProj(player.raijingekiWeapon, centerPoint, ProjIds.KKnuckleMegaPunch, player, 4, Global.defFlinch, 0.25f);
             else if (sprite.name == "zero_dropkick") proj = new GenericMeleeProj(player.zeroDownThrustWeaponA, centerPoint, ProjIds.KKnuckleDropKick, player, 4, Global.halfFlinch, 0.25f);
             else if (sprite.name == "zero_hyoroga_attack") proj = new GenericMeleeProj(player.zeroAirSpecialWeapon, centerPoint, ProjIds.HyorogaSwing, player, 4, 0, 0.25f);
             else if (sprite.name == "zero_attack_dash") proj = new GenericMeleeProj(player.zSaberWeapon, centerPoint, ProjIds.ZSaberdash, player, 2, 0, 0.25f, isReflectShield: true);

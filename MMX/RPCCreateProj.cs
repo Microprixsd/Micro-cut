@@ -42,6 +42,14 @@ namespace MMXOnline
             {
                 proj = new XSaberProj(new XSaber(player), pos, xDir, player, netProjByte);
             }
+            else if (projId == (int)ProjIds.BusterUnpoUp)
+            {
+                proj = new BusterUnpoUpProj(new Buster(), pos, xDir, player, netProjByte);
+            }
+            else if (projId == (int)ProjIds.BusterUnpoDown)
+            {
+                proj = new BusterUnpoDownProj(new Buster(), pos, xDir, player, netProjByte);
+            }
             else if (projId == (int)ProjIds.Buster3)
             {
                 proj = new Buster3Proj(new Buster(), pos, xDir, arguments[extraDataIndex], player, netProjByte);

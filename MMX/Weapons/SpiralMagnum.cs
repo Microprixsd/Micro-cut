@@ -11,7 +11,7 @@ namespace MMXOnline
         public SpiralMagnum(int altFire) : base(altFire)
         {
             shootSounds = new List<string>() { "spiralMagnum", "spiralMagnum", "spiralMagnum", "sniperMissile" };
-            rateOfFire = 0.75f;
+            rateOfFire = 1f;
             altFireCooldown = 2;
             index = (int)WeaponIds.SpiralMagnum;
             weaponBarBaseIndex = 34;
@@ -36,7 +36,12 @@ namespace MMXOnline
             {
                 return 8;
             }
-            return 4;
+            return 6;
+        }
+        public override void update()
+        {
+            base.update();
+            rechargeAmmo(1f);
         }
 
         public override void axlGetProjectile(Weapon weapon, Point bulletPos, int xDir, Player player, float angle, IDamagable target, Character headshotTarget, Point cursorPos, int chargeLevel, ushort netId)
@@ -190,7 +195,7 @@ namespace MMXOnline
             this.player = player;
             this.headshotChar = headshotChar;
 
-            if (type == 0) damager.damage = 1.5f;
+            if (type == 0) damager.damage = 2;
             isHyper = player.character?.isWhiteAxl() == true;
             isScoped = type == 1;
             maxTime = float.MaxValue;
@@ -204,7 +209,7 @@ namespace MMXOnline
                 projId = (int)ProjIds.SpiralMagnumScoped;
                 maxDist = player.adjustedZoomRange;
                 dist = jumpDist;
-                damager.damage += MathF.Round(6 * player.character.zoomCharge);
+                damager.damage = 0 + MathF.Round(6f * player.character.zoomCharge);
                 if (!player.character.hasScopedTarget())
                 {
                     damager.damage = 0;

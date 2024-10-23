@@ -300,7 +300,7 @@ namespace MMXOnline
             acidHurtCooldown = 0.5f;
             acidTime += time;
             oilTime = 0;
-            if (acidTime > 6) acidTime = 6;
+            if (acidTime > 4) acidTime = 4;
         }
 
         public float oilTime;
@@ -359,7 +359,7 @@ namespace MMXOnline
                 burnTime += oilTime;
                 oilTime = 0;
             }
-            if (burnTime > 8) burnTime = 8;
+            if (burnTime > 6) burnTime = 6;
         }
 
         float igFreezeRecoveryCooldown = 0;
@@ -3012,6 +3012,11 @@ namespace MMXOnline
                 if (player.isVile && hasFrozenCastleBarrier())
                 {
                     damageSavings += damage * frozenCastlePercent;
+                }
+
+                if (player.isZBusterZero() && isBlackZero2())
+                {
+                    damageSavings += damage / 4f;
                 }
 
                 while (damageSavings >= 1)

@@ -37,7 +37,7 @@ namespace MMXOnline
 
             if (state is not DrDopplerAbsorbState)
             {
-                rechargeAmmo(1);
+                rechargeAmmo(2);
             }
             else
             {
@@ -77,9 +77,9 @@ namespace MMXOnline
                     {
                         changeState(getShootState(false));
                     }
-                    else if (input.isPressed(Control.Special1, player) && ammo >= 8)
+                    else if (input.isPressed(Control.Special1, player) && ammo >= 4)
                     {
-                        deductAmmo(8);
+                        deductAmmo(4);
                         changeState(new DrDopplerAbsorbState());
                     }
                     else if (input.isPressed(Control.Dash, player))
@@ -160,11 +160,12 @@ namespace MMXOnline
     public class DrDopplerBallProj : Projectile
     {
         public DrDopplerBallProj(Weapon weapon, Point pos, int xDir, int type, Player player, ushort netProjId, bool sendRpc = false) :
-            base(weapon, pos, xDir, 250, 3, player, type == 0 ? "drdoppler_proj_ball" : "drdoppler_proj_ball2", Global.miniFlinch, 0.5f, netProjId, player.ownedByLocalPlayer)
+            base(weapon, pos, xDir, 250, 3, player, type == 0 ? "drdoppler_proj_ball" : "drdoppler_proj_ball2", Global.halfFlinch, 0.5f, netProjId, player.ownedByLocalPlayer)
         {
             if (type == 0)
             {
                 projId = (int)ProjIds.DrDopplerBall;
+                damager.flinch= Global.halfFlinch;
             }
             else
             {

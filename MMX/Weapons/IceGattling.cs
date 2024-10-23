@@ -11,7 +11,7 @@ namespace MMXOnline
         public IceGattling(int altFire) : base(altFire)
         {
             shootSounds = new List<string>() { "iceGattling", "iceGattling", "iceGattling", "gaeaShield" };
-            rateOfFire = 0.1f;
+            rateOfFire = 0.08f;
             index = (int)WeaponIds.IceGattling;
             weaponBarBaseIndex = 37;
             weaponSlotIndex = 57;
@@ -29,6 +29,11 @@ namespace MMXOnline
                 return 8;
             }
             return 0.5f;
+        }
+        public override void update()
+        {
+            base.update();
+            rechargeAmmo(0.5f);
         }
 
         public override void axlGetProjectile(Weapon weapon, Point bulletPos, int xDir, Player player, float angle, IDamagable target, Character headshotTarget, Point cursorPos, int chargeLevel, ushort netId)
@@ -54,7 +59,7 @@ namespace MMXOnline
     {
         public float sparkleTime = 0;
         public IceGattlingProj(Weapon weapon, Point pos, int xDir, Player player, Point bulletDir, ushort netProjId) : 
-            base(weapon, pos, xDir, 400, 1, player, "icegattling_proj", 0, 0.1f, netProjId, player.ownedByLocalPlayer)
+            base(weapon, pos, xDir, 400, 1, player, "icegattling_proj", 0, 0.15f, netProjId, player.ownedByLocalPlayer)
         {
             maxTime = 0.4f;
             reflectable = true;

@@ -33,7 +33,7 @@ namespace MMXOnline
         public GaeaShieldProj gaeaShield;
         public GravityWellProj gravityWell;
         public int totalChipHealAmount;
-        public const int maxTotalChipHealAmount = 24;
+        public const int maxTotalChipHealAmount = 32;
         public float unpocrushCooldown = 1f;
         public float hadoukenCooldownTime;
         public float maxHadoukenCooldownTime = 1f;
@@ -122,7 +122,7 @@ namespace MMXOnline
                     rechargeHealthTime -= Global.spf;
                     if (rechargeHealthTime <= 0)
                     {
-                        rechargeHealthTime = 1;
+                        rechargeHealthTime = 2;
                         addHealth(1);
                         totalChipHealAmount++;
                     }
@@ -767,7 +767,7 @@ namespace MMXOnline
         public Anim barrierAnim;
         public float barrierTime;
         public bool barrierFlinch;
-        public float barrierDuration { get { return barrierFlinch ? 1.5f : 0.75f; } }
+        public float barrierDuration { get { return barrierFlinch ? 3f : 1.75f; } }
         public float barrierCooldown;
         public float maxBarrierCooldown { get { return 0; } }
         public bool hasBarrier(bool isOrange)

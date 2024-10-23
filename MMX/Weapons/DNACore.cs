@@ -55,11 +55,10 @@ namespace MMXOnline
                 armorFlag = character.player.armorFlag;
                 frozenCastle = character.isFrozenCastleActiveBS.getValue();
                 speedDevil = character.isSpeedDevilActiveBS.getValue();
-                ultimateArmor = character.hasUltimateArmorBS.getValue();
                 if (charNum == 0) weapons = loadout.xLoadout.getWeaponsFromLoadout(character.player);
                 if (charNum == 1)
                 {
-                    rakuhouhaAmmo = character.player.zeroGigaAttackWeapon.ammo;
+                    rakuhouhaAmmo = character.player.zeroGigaAttackWeapon.ammo -16;
                     if (character.isNightmareZeroBS.getValue()) rakuhouhaAmmo = character.player.zeroDarkHoldWeapon.ammo;
                 }
                 if (charNum == 2) weapons = loadout.vileLoadout.getWeaponsFromLoadout(false);
@@ -79,13 +78,13 @@ namespace MMXOnline
                 // For any hyper modes added here, be sure to de-apply them if "preserve undisguise" is used in: axl.updateDisguisedAxl()
                 if (character.sprite.name.Contains("vilemk2")) hyperMode = DNACoreHyperMode.VileMK2;
                 else if (character.sprite.name.Contains("vilemk5")) hyperMode = DNACoreHyperMode.VileMK5;
-                else if (character.isBlackZero()) hyperMode = DNACoreHyperMode.BlackZero;
+                /*else if (character.isBlackZero()) hyperMode = DNACoreHyperMode.BlackZero;
                 else if (character.isWhiteAxl()) hyperMode = DNACoreHyperMode.WhiteAxl;
                 else if (character.isAwakenedZeroBS.getValue()) hyperMode = DNACoreHyperMode.AwakenedZero;
-                else if (character.isNightmareZeroBS.getValue()) hyperMode = DNACoreHyperMode.NightmareZero;
+                else if (character.isNightmareZeroBS.getValue()) hyperMode = DNACoreHyperMode.NightmareZero;*/
             }
 
-            rateOfFire = 1f;
+            rateOfFire = 10f;
             index = (int)WeaponIds.DNACore;
             weaponBarBaseIndex = 30 + charNum;
             weaponBarIndex = weaponBarBaseIndex;

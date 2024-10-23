@@ -112,10 +112,6 @@ namespace MMXOnline
             window.SetView(view);
             if (Global.overrideFPS != null)
             {
-                window.SetFramerateLimit((uint)Global.overrideFPS);
-            }
-            else
-            {
                 window.SetFramerateLimit((uint)options.maxFPS);
             }
 

@@ -70,11 +70,11 @@ namespace MMXOnline
         public LoopingSound iceGattlingSound;
         public float whiteAxlTime;
         public float dodgeRollCooldown;
-        public const float maxDodgeRollCooldown = 1.5f;
+        public const float maxDodgeRollCooldown = 2.5f;
         public bool disguiseCoverBlown;
         public bool hyperAxlUsed;
         public ShaderWrapper axlPaletteShader;
-        public float maxHyperAxlTime = 30;
+        public float maxHyperAxlTime = 108;
         public List<int> ammoUsages = new List<int>();
 
         // Used to be 0.5, 100
@@ -328,15 +328,15 @@ namespace MMXOnline
             {
                 if (player.input.isPressed(Control.Special1, player) && !isCharging())
                 {
-                    if (player.scrap >= 2)
+                    if (player.scrap >= 1)
                     {
-                        player.scrap -= 2;
+                        player.scrap --;
                         shootAssassinShot(isAltFire: true);
                         return;
                     }
                     else
                     {
-                        Global.level.gameMode.setHUDErrorMessage(player, "Quick assassinate requires 2 scrap");
+                        Global.level.gameMode.setHUDErrorMessage(player, "Quick assassinate requires 1 scrap");
                     }
                 }
             }
@@ -407,7 +407,7 @@ namespace MMXOnline
 
             if (isZooming() && !isZoomingIn && !isZoomingOut)
             {
-                zoomCharge += Global.spf * 0.5f;
+                zoomCharge += Global.spf * 0.4f;
                 if (isWhiteAxl()) zoomCharge = 1;
                 if (zoomCharge > 1) zoomCharge = 1;
             }
@@ -667,13 +667,13 @@ namespace MMXOnline
 
                     if (player.weapon is GLauncher && charState.canShoot() && !(charState is LadderClimb))
                     {
-                        if (shootHeld && shootTime == 0 && player.weapon.ammo >= 1)
+                        if (shootHeld && shootTime == 0 && player.weapon.ammo >= 2)
                         {
                             recoilTime = 0.2f;
                             player.axlWeapon.axlShoot(player);
                         }
 
-                        if (player.axlLoadout.blastLauncherAlt == 0)
+                        if (player.axlLoadout.blastLauncherAlt == 0 && flag == null && player.axlWeapon.ammo >= 8)
                         {
                             if (altShootPressed && shootTime == 0 && player.weapon.altShootTime == 0 && player.weapon.ammo >= 1)
                             {
@@ -710,7 +710,7 @@ namespace MMXOnline
                             }
                             altRayGunHeld = player.axlWeapon.ammo > 0;
 
-                            if (player.axlLoadout.rayGunAlt == 0)
+                            if (player.axlLoadout.rayGunAlt == 0 && flag == null)
                             {
                                 Point bulletDir = getAxlBulletDir();
                                 float whiteAxlMod = isWhiteAxl() ? 2 : 1;
@@ -721,12 +721,12 @@ namespace MMXOnline
 
                     if (player.weapon is BlackArrow && charState.canShoot() && !player.weapon.noAmmo())
                     {
-                        if (shootHeld && shootTime == 0)
+                        if (shootHeld && shootTime == 0 && player.axlWeapon.ammo >= 4)
                         {
                             recoilTime = 0.2f;
                             player.axlWeapon.axlShoot(player);
                         }
-                        else if (altShootHeld && shootTime == 0 && player.weapon.altShootTime == 0)
+                        else if (altShootHeld && shootTime == 0 && player.weapon.altShootTime == 0 && player.axlWeapon.ammo >= 8)
                         {
                             recoilTime = 0.2f;
                             player.axlWeapon.axlShoot(player, AxlBulletType.AltFire);
@@ -735,7 +735,7 @@ namespace MMXOnline
 
                     if (player.weapon is SpiralMagnum && charState.canShoot())
                     {
-                        if (shootHeld && shootTime == 0)
+                        if (shootHeld && shootTime == 0 && player.axlWeapon.ammo >= 2)
                         {
                             if (!player.weapon.noAmmo())
                             {
@@ -747,7 +747,7 @@ namespace MMXOnline
                         {
                             if (player.axlLoadout.spiralMagnumAlt == 0)
                             {
-                                if (altShootPressed && player.axlWeapon.ammo > 0 && shootTime == 0 && player.weapon.altShootTime == 0)
+                                if (altShootPressed && shootTime == 0 && player.weapon.altShootTime == 0 && player.axlWeapon.ammo >= 8)
                                 {
                                     recoilTime = 0.2f;
                                     player.axlWeapon.axlShoot(player, AxlBulletType.AltFire);
@@ -755,7 +755,7 @@ namespace MMXOnline
                             }
                             else
                             {
-                                if (altShootPressed && (charState is Idle || charState is Crouch))
+                                if (altShootPressed && (charState is Idle || charState is Crouch) && player.axlWeapon.ammo >= 6)
                                 {
                                     if (!_zoom)
                                     {
@@ -777,7 +777,7 @@ namespace MMXOnline
                             recoilTime = 0.2f;
                             player.axlWeapon.axlShoot(player);
                         }
-                        else if (altShootHeld && shootTime == 0 && player.weapon.altShootTime == 0)
+                        else if (altShootHeld && shootTime == 0 && player.weapon.altShootTime == 0 && player.axlWeapon.ammo >= 8)
                         {
                             recoilTime = 0.2f;
                             player.axlWeapon.axlShoot(player, AxlBulletType.AltFire);
@@ -792,7 +792,7 @@ namespace MMXOnline
                             player.axlWeapon.altShootTime = player.axlWeapon.altFireCooldown;
                             player.axlWeapon.axlShoot(player);
                         }
-                        else if (altShootHeld)
+                        else if (altShootHeld && player.axlWeapon.ammo >= 4)
                         {
                             if (player.axlLoadout.plasmaGunAlt == 0)
                             {
@@ -817,13 +817,13 @@ namespace MMXOnline
 
                     if (player.weapon is IceGattling && charState.canShoot() && !(charState is LadderClimb) && player.weapon.ammo > 0)
                     {
-                        if (altShootPressed && player.axlLoadout.iceGattlingAlt == 0 && gaeaShield == null)
+                        if (altShootPressed && player.axlLoadout.iceGattlingAlt == 0 && gaeaShield == null && player.axlWeapon.ammo >= 8)
                         {
                             recoilTime = 0.2f;
                             player.axlWeapon.axlShoot(player, AxlBulletType.AltFire);
                         }
 
-                        bool isAltRev = (altShootHeld && player.axlLoadout.iceGattlingAlt == 1);
+                        bool isAltRev = altShootHeld && player.axlLoadout.iceGattlingAlt == 1;
                         if (shootHeld || isAltRev)
                         {
                             isRevving = true;
@@ -851,7 +851,7 @@ namespace MMXOnline
 
                         if (player.axlLoadout.flameBurnerAlt == 0)
                         {
-                            if (altShootHeld && shootTime == 0 && player.weapon.altShootTime == 0)
+                            if (altShootHeld && shootTime == 0 && player.weapon.altShootTime == 0 && player.axlWeapon.ammo >= 8)
                             {
                                 recoilTime = 0.2f;
                                 player.axlWeapon.axlShoot(player, AxlBulletType.AltFire);
@@ -862,7 +862,7 @@ namespace MMXOnline
                         {
                             if (altShootHeld)
                             {
-                                if (shootTime == 0 && player.weapon.altShootTime == 0)
+                                if (shootTime == 0 && player.weapon.altShootTime == 0 && flag == null && player.axlWeapon.ammo >= 4)
                                 {
                                     recoilTime = 0.2f;
                                     player.axlWeapon.axlShoot(player, AxlBulletType.AltFire);

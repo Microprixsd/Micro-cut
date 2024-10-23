@@ -88,7 +88,7 @@ namespace MMXOnline
                 angle = 0;
             }
 
-            if ((health < maxHealth * 0.5f && health > 0) || scrapAbsorbed >= 32)
+            if ((health < maxHealth * 0.4f && health > 0) || scrapAbsorbed >= 32)
             {
                 if (selfDestructTime == 0)
                 {
@@ -425,11 +425,11 @@ namespace MMXOnline
             {
                 if (shootTime == 0)
                 {
-                    shootTime = 0.15f;
+                    shootTime = 0.25f;
                     Point vel = new Point(Helpers.randomRange(-75, 75), Helpers.randomRange(-300, -250));
                     new MorphMCScrapProj(mmCocoon.weapon, maverick.getFirstPOIOrDefault(), MathF.Sign(vel.x), vel, 0.75f, false, null, player, player.getNextActorNetId(), rpc: true);
                     mmCocoon.ammo--;
-                    mmCocoon.scrapRegenTime = 0;
+                    mmCocoon.scrapRegenTime = -1.5f;
                 }
             }
 
@@ -669,11 +669,11 @@ namespace MMXOnline
             {
                 if (shootTime == 0)
                 {
-                    shootTime = 0.15f;
+                    shootTime = 0.25f;
                     Point vel = new Point(Helpers.randomRange(-75, 75), Helpers.randomRange(-300, -250));
                     new MorphMCScrapProj(maverick.weapon, maverick.getFirstPOIOrDefault(), MathF.Sign(vel.x), vel, 1.5f, false, null, player, player.getNextActorNetId(), rpc: true);
                     mmCocoon.ammo--;
-                    mmCocoon.scrapRegenTime = 0;
+                    mmCocoon.scrapRegenTime = -1.5f;
                 }
             }
             else if (input.isHeld(Control.Special1, player))
@@ -687,7 +687,7 @@ namespace MMXOnline
                 }
                 if (shootTime == 0)
                 {
-                    shootTime = 0.1f;
+                    shootTime = 0.12f;
                     Point suckPos = maverick.getCenterPos().add(Point.createFromAngle(suckAngle).times(suckRadius));
                     Point vel = suckPos.directionToNorm(maverick.getCenterPos()).times(350);
                     new MorphMCScrapProj(maverick.weapon, suckPos, MathF.Sign(vel.x), vel, 0.5f, true, mmCocoon, player, player.getNextActorNetId(), rpc: true);

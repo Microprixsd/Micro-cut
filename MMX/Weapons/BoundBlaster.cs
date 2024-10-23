@@ -1,4 +1,5 @@
-﻿using SFML.Graphics;
+﻿using DeviceId.Formatters;
+using SFML.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,12 +22,17 @@ namespace MMXOnline
             sprite = "axl_arm_boundblaster";
             flashSprite = "axl_pistol_flash";
             chargedFlashSprite = "axl_pistol_flash_charged";
-            altFireCooldown = 2;
+            altFireCooldown = 2f;
 
             if (altFire == 1)
             {
                 shootSounds[3] = "boundBlaster";
             }
+        }
+        public override void update()
+        {
+            base.update();
+            rechargeAmmo(0.5f);
         }
 
         public override float getAmmoUsage(int chargeLevel)
@@ -95,10 +101,11 @@ namespace MMXOnline
             reflectable = true;
             vel.x = bulletDir.x * speed;
             vel.y = bulletDir.y * speed;
-            maxTime = 1.5f;
+            maxTime = 1.8f;
             if (player.character?.isWhiteAxl() == true)
             {
-                maxTime = 3f;
+                maxTime = 2.5f;
+                damager.hitCooldown = 0.23f;
             }
             projId = (int)ProjIds.BoundBlaster;
             updateAngle();
@@ -200,8 +207,11 @@ namespace MMXOnline
 
         public void increasePower()
         {
-            speed += 50;
-            updateDamager(damager.damage + 0.5f);
+            speed += 80;
+            float newDamage = damager.damage + 0.505f;
+            newDamage = (float)Math.Round(newDamage);
+            newDamage = Math.Min(newDamage, 3);
+            updateDamager(newDamage);
         }
 
         public override void render(float x, float y)
@@ -410,6 +420,7 @@ namespace MMXOnline
             base(weapon, pos, xDir, 0, 3, player, "movingwheel_proj", Global.defFlinch, 1, netProjId, player.ownedByLocalPlayer)
         {
             projId = (int)ProjIds.MovingWheel;
+            destroyOnHit = true;
             if (player.character?.isWhiteAxl() == true)
             {
                 startMaxTime = 5;
@@ -464,7 +475,7 @@ namespace MMXOnline
                     damager.damage = 3;
                     if (isDefenderFavored()) damager.damage = 4;
                     damager.flinch = Global.defFlinch;
-                    destroyOnHit = false;
+                    destroyOnHit = true;
                     maxTime = startMaxTime;
                     speed = 250;
                     updateDamager();

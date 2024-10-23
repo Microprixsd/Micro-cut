@@ -702,5 +702,7 @@ namespace MMXOnline
         KickCharge,
         XUPPunchCharged,
         UnlimitedCrush,
+        BusterUnpoUp,
+        BusterUnpoDown,
     }
 }

@@ -339,7 +339,7 @@
                     Helpers.decrementTime(ref hurtTime);
                     if (hurtTime == 0)
                     {
-                        hurtTime = 0.16666f;
+                        hurtTime = 0.3f;
                         (maverick as CrushCrawfish).meleeWeapon.applyDamage(victim, false, maverick, (int)ProjIds.CrushCGrabAttack);
                     }
                 }

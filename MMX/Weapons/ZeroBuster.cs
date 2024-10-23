@@ -47,7 +47,7 @@ namespace MMXOnline
     {
         public Actor target;
         public ShingetsurinProj(Weapon weapon, Point pos, int xDir, float startTime, Player player, ushort netProjId, bool rpc = false) :
-            base(weapon, pos, xDir, 200, 2, player, "shingetsurin_proj", Global.defFlinch, 1, netProjId, player.ownedByLocalPlayer)
+            base(weapon, pos, xDir, 200, 2, player, "shingetsurin_proj", Global.defFlinch, 1.2f, netProjId, player.ownedByLocalPlayer)
         {
             maxTime = 3f;
             destroyOnHit = false;
@@ -308,6 +308,10 @@ namespace MMXOnline
             landSprite = "projswing";
             this.shootProj = shootProj;
             if (shootProj)
+            {
+                superArmor = false;
+            }
+            else 
             {
                 superArmor = true;
             }

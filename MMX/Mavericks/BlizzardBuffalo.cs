@@ -113,8 +113,8 @@ namespace MMXOnline
         public float getStompDamage()
         {
             float damagePercent = 0;
-            if (deltaPos.y > 150 * Global.spf) damagePercent = 0.5f;
-            if (deltaPos.y > 225 * Global.spf) damagePercent = 0.75f;
+            if (deltaPos.y > 150 * Global.spf) damagePercent = 0.6f;
+            if (deltaPos.y > 225 * Global.spf) damagePercent = 0.8f;
             if (deltaPos.y > 300 * Global.spf) damagePercent = 1;
             return damagePercent;
         }
@@ -143,7 +143,7 @@ namespace MMXOnline
                 float damagePercent = getStompDamage();
                 if (damagePercent > 0)
                 {
-                    proj.damager.damage = 4 * damagePercent;
+                    proj.damager.damage = 5 * damagePercent;
                 }
             }
         }
@@ -207,7 +207,7 @@ namespace MMXOnline
     {
         float health = 6;
         public BBuffaloIceProjGround(Weapon weapon, Point pos, float angle, Player player, ushort netProjId, bool sendRpc = false) :
-            base(weapon, pos, 1, 0, 3, player, "bbuffalo_proj_ice", Global.defFlinch, 0.5f, netProjId, player.ownedByLocalPlayer)
+            base(weapon, pos, 1, 0, 3, player, "bbuffalo_proj_ice", Global.defFlinch, 0, netProjId, player.ownedByLocalPlayer)
         {
             maxTime = 5;
             projId = (int)ProjIds.BBuffaloIceProjGround;
@@ -572,7 +572,7 @@ namespace MMXOnline
 
     public class BBuffaloDragged : GenericGrabbedState
     {
-        public const float maxGrabTime = 5;
+        public const float maxGrabTime = 6;
         public BBuffaloDragged(BlizzardBuffalo grabber) :
             base(grabber, maxGrabTime, "_dash", reverseZIndex: true, freeOnHitWall: false, lerp: true, additionalGrabSprite: "_dash_grab")
         {

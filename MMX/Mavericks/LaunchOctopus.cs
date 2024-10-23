@@ -396,17 +396,20 @@ namespace MMXOnline
             base.update();
             if (player == null) return;
 
+
             if (maverick.frameIndex == 3 && !shootOnce)
             {
                 shootOnce = true;
                 maverick.playSound("torpedo", sendRpc: true);
                 var pois = maverick.currentFrame.POIs;
-                var lo = (maverick as LaunchOctopus);
+                var lo = maverick as LaunchOctopus;
 
-                new TorpedoProj(lo.homingTorpedoWeapon, lo.pos.add(pois[0]), 1, player, 3, player.getNextActorNetId(), 0, rpc: true);
-                new TorpedoProj(lo.homingTorpedoWeapon, lo.pos.add(pois[1]), 1, player, 3, player.getNextActorNetId(), 0, rpc: true);
-                new TorpedoProj(lo.homingTorpedoWeapon, lo.pos.add(pois[2]), 1, player, 3, player.getNextActorNetId(), 180, rpc: true);
-                new TorpedoProj(lo.homingTorpedoWeapon, lo.pos.add(pois[3]), 1, player, 3, player.getNextActorNetId(), 180, rpc: true);
+                if (maverick.ammo >= 2) new TorpedoProj(lo.homingTorpedoWeapon, lo.pos.add(pois[0]), 1, player, 3, player.getNextActorNetId(), 0, rpc: true);
+                if (maverick.ammo >= 2) new TorpedoProj(lo.homingTorpedoWeapon, lo.pos.add(pois[1]), 1, player, 3, player.getNextActorNetId(), 0, rpc: true);
+                if (maverick.ammo >= 2) new TorpedoProj(lo.homingTorpedoWeapon, lo.pos.add(pois[2]), 1, player, 3, player.getNextActorNetId(), 180, rpc: true);
+                if (maverick.ammo >= 2) new TorpedoProj(lo.homingTorpedoWeapon, lo.pos.add(pois[3]), 1, player, 3, player.getNextActorNetId(), 180, rpc: true);
+                maverick.ammo -= 8;
+                if (maverick.ammo < 0) maverick.ammo = 0;
             }
 
             if (maverick.isAnimOver())
@@ -485,7 +488,7 @@ namespace MMXOnline
     {
         Character victim;
         float soundTime = 1;
-        float leechTime = 0.5f;
+        float leechTime = 1f;
         public bool victimWasGrabbedSpriteOnce;
         float timeWaiting;
         public LaunchODrainState(Character grabbedChar) : base("drain", "")
@@ -518,7 +521,7 @@ namespace MMXOnline
                 }
                 if (maverick.isDefenderFavored())
                 {
-                    if (leechTime > 0.5f)
+                    if (leechTime > 1f)
                     {
                         leechTime = 0;
                         maverick.addHealth(2, true);
@@ -527,7 +530,7 @@ namespace MMXOnline
                 }
             }
 
-            if (leechTime > 0.5f)
+            if (leechTime > 1f)
             {
                 leechTime = 0;
                 maverick.addHealth(2, true);
@@ -542,7 +545,7 @@ namespace MMXOnline
                 maverick.playSound("launchoDrain", sendRpc: true);
             }
 
-            if (stateTime > 4f)
+            if (stateTime > 3f)
             {
                 maverick.changeState(new MFall());
             }

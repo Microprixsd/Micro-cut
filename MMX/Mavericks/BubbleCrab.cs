@@ -200,7 +200,7 @@ namespace MMXOnline
         int num;
         int type;
         public BCrabBubbleSplashProj(Weapon weapon, Point pos, int xDir, int num, int type, Player player, ushort netProjId, bool rpc = false) :
-            base(weapon, pos, xDir, 0, 0, player, "bcrab_bubble_ring_start", 0, 0.15f, netProjId, player.ownedByLocalPlayer)
+            base(weapon, pos, xDir, 0, 1, player, "bcrab_bubble_ring_start", 0, 0.14f, netProjId, player.ownedByLocalPlayer)
         {
             projId = (int)ProjIds.BCrabBubbleSplash;
             this.num = num;
@@ -239,12 +239,15 @@ namespace MMXOnline
                 }
                 else
                 {
-                    vel = new Point(xDir * 150, 0);
+                    vel = new Point(xDir * 550, 0);
                 }
                 speed = vel.magnitude;
                 maxDistance = 150;
-                updateDamager(2);
+                damager.flinch = Global.halfFlinch;
+                damager.hitCooldown = 0.4f;
+                damager.damage = 2;
                 destroyOnHit = true;
+
             }
         }
     }
@@ -272,8 +275,8 @@ namespace MMXOnline
             Helpers.decrementTime(ref shootCooldown);
             if (shootCooldown == 0 && shootPos != null)
             {
-                shootCooldown = 0.25f;
-                num = (num == 1 ? 0 : 1);
+                shootCooldown = 0.02f;
+                num = num == 1 ? 0 : 1;
                 maverick.playSound("bcrabShoot", sendRpc: true);
                 int type = input.isHeld(Control.Up, player) ? 1 : 0;
                 new BCrabBubbleSplashProj(maverick.weapon, shootPos.Value, maverick.xDir, num, type, player, player.getNextActorNetId(), rpc: true);
@@ -471,7 +474,7 @@ namespace MMXOnline
 
     public class BCrabSummonBubbleProj : Projectile, IDamagable
     {
-        float health = 2;
+        float health = 3;
         public BCrabSummonBubbleProj(Weapon weapon, Point pos, int xDir, Player player, ushort netProjId, bool rpc = false) :
             base(weapon, pos, xDir, 0, 0, player, "bcrab_summon_bubble", 0, 1, netProjId, player.ownedByLocalPlayer)
         {
@@ -513,7 +516,7 @@ namespace MMXOnline
 
     public class BCrabSummonCrabProj : Projectile, IDamagable
     {
-        float health = 2;
+        float health = 3;
         int? moveDirOnce = null;
         BCrabSummonBubbleProj shield;
         BubbleCrab maverick;

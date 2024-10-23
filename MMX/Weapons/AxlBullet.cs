@@ -34,7 +34,8 @@ namespace MMXOnline
                 sprite = "axl_arm_pistol";
                 flashSprite = "axl_pistol_flash";
                 chargedFlashSprite = "axl_pistol_flash_charged";
-                altFireCooldown = 0.3f;
+                altFireCooldown = 0.4f;
+                rateOfFire = 0.16f;
                 displayName = "Axl Bullets";
             }
             else if (type == AxlBulletWeaponType.MetteurCrash)
@@ -121,6 +122,10 @@ namespace MMXOnline
             else if (chargeLevel >= 3) return 8;
             else return 1;
             //return 0;
+        }
+        public override float whiteAxlFireRateMod()
+        {
+            return 0.75f;
         }
 
         public override void axlGetProjectile(Weapon weapon, Point bulletPos, int xDir, Player player, float angle, IDamagable target, Character headshotTarget, Point cursorPos, int chargeLevel, ushort netId)

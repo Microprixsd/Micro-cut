@@ -59,7 +59,7 @@ namespace MMXOnline
         Point hitPos;
         public const float range = 150;
         public AssassinBulletProj(Weapon weapon, Point pos, Point hitPos, int xDir, Player player, IDamagable target, Character headshotChar, ushort netProjId) :
-            base(weapon, pos, xDir, 1000, 8, player, "assassin_bullet_proj", 0, 0.5f, netProjId, player.ownedByLocalPlayer)
+            base(weapon, pos, xDir, 1000, 6, player, "assassin_bullet_proj", 0, 0.5f, netProjId, player.ownedByLocalPlayer)
         {
             this.target = target;
 
@@ -114,10 +114,11 @@ namespace MMXOnline
 
         public void applyDamage(IDamagable damagable, bool weakness)
         {
-            float overrideDamage = weakness ? (damager.damage * Damager.headshotModifier) : damager.damage;
+            float overrideDamage = weakness ? (damager.damage + 2) : damager.damage;
             if (weapon is AssassinBullet && weakness)
             {
-                overrideDamage = Damager.ohkoDamage;
+                damager = new Damager(player, 8, 0, 0);
+                
             }
             //DevConsole.log("Weakness: " + weakness.ToString() + ",bd:" + damager.damage.ToString() + ",");
             damager.applyDamage(damagable, false, weapon, this, projId, overrideDamage: overrideDamage);

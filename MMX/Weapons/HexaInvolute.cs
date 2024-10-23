@@ -121,8 +121,6 @@ namespace MMXOnline
     public class HexaInvoluteProj : Projectile
     {
         public Point destPos;
-        public float timer = 0;
-        public float repeatCount = 0;
         public float sinDampTime = 1;
         public Anim muzzle;
         float radius = 120;
@@ -137,7 +135,6 @@ namespace MMXOnline
             setIndestructableProperties();
             sprite.hitboxes = new List<Collider>();
             player.character.addHealth(3);
-
             if (rpc)
             {
                 rpcCreate(pos, player, netProjId, xDir);
@@ -146,6 +143,8 @@ namespace MMXOnline
 
         public override void update()
         {   
+            base.update();
+            
             if (ownedByLocalPlayer && owner.character != null)
             {
                 incPos(owner.character.deltaPos);
@@ -173,7 +172,6 @@ namespace MMXOnline
                 ang = Helpers.to360(ang);
             }
         }
-        
 
         float partCooldown;
         public override void render(float x, float y)

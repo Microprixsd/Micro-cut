@@ -289,12 +289,13 @@ namespace MMXOnline
             Helpers.decrementTime(ref shootTime);
             if (isAI || input.isHeld(Control.Shoot, player))
             {
-                Helpers.decrementTime(ref maverick.ammo);
                 if (shootTime == 0)
                 {
-                    shootTime = 0.15f;
+                    shootTime = 0.21f;
+                    maverick.ammo--;
                     Point shootPos = maverick.getFirstPOIOrDefault().addRand(10, 5);
-                    new MorphMPowderProj(maverick.weapon, shootPos, maverick.xDir,player, player.getNextActorNetId(), rpc: true);
+                    new MorphMPowderProj(maverick.weapon, shootPos, maverick.xDir,player, player.getNextActorNetId(), rpc: true)
+                    ;
                 }
             }
 

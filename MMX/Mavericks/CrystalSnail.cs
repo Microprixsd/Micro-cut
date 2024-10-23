@@ -54,7 +54,7 @@
             {
                 if (ammoTime == 0)
                 {
-                    ammoTime = 0.5f;
+                    ammoTime = 0.3f;
                     ammo--;
                     if (ammo <= 0)
                     {
@@ -170,7 +170,7 @@
             var character = other.gameObject as Character;
             if (state is CSnailDashState && character != null && character.isCrystalized && character.player.alliance != player.alliance)
             {
-                Damager.applyDamage(player, 3, 1f, Global.defFlinch, character, false, (int)WeaponIds.CrystalHunter, 20, player.character, (int)ProjIds.CrystalHunterDash);
+                Damager.applyDamage(player, 5, 1f, Global.defFlinch, character, false, (int)WeaponIds.CrystalHunter, 20, player.character, (int)ProjIds.CrystalHunterDash);
             }
         }
 

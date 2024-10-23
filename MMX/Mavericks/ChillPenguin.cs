@@ -350,7 +350,7 @@ namespace MMXOnline
                 useGravity = true;
                 collider.wallOnly = true;
                 damager.flinch = Global.defFlinch;
-                damager.damage = 4;
+                damager.damage = 3;
             }
         }
 

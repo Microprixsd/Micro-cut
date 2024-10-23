@@ -13,7 +13,7 @@ namespace MMXOnline
         public void setUnpoBuster()
         {
             isUnpoBuster = true;
-            rateOfFire = 1f;
+            rateOfFire = 1.4f;
             weaponBarBaseIndex = 70;
             weaponBarIndex = 59;
             weaponSlotIndex = 121;
@@ -22,12 +22,20 @@ namespace MMXOnline
 
         public static bool isNormalBuster(Weapon weapon)
         {
-            return weapon is Buster buster && !buster.isUnpoBuster;
+            if (weapon is Buster buster)
+		{
+			return !buster.isUnpoBuster;
+		}
+		return false;
         }
 
         public static bool isWeaponUnpoBuster(Weapon weapon)
         {
-            return weapon is Buster buster && buster.isUnpoBuster;
+           if (!(weapon is Buster { isUnpoBuster: var result }) || 1 == 0)
+		{
+			return false;
+		}
+		return result;
         }
 
         public Buster() : base()
@@ -183,7 +191,7 @@ namespace MMXOnline
             base(weapon, pos, xDir, 350, 4, player, "buster_unpo", Global.defFlinch, 0.01f, netProjId, player.ownedByLocalPlayer)
         {
             fadeSprite = "buster3_fade";
-            reflectable = true;
+            reflectable = false;
             maxTime = 0.5f;
             projId = (int)ProjIds.BusterUnpo;
         }
@@ -195,7 +203,7 @@ namespace MMXOnline
 	{
 		fadeSprite = "buster3_fade";
 		maxTime = 1.25f;
-		projId = 400;
+		projId = (int)ProjIds.BusterUnpoUp;
 		vel.x = 0f;
 		vel.y = -500f;
 		if (rpc)
@@ -254,7 +262,7 @@ namespace MMXOnline
 	{
 		fadeSprite = "buster3_fade";
 		maxTime = 1.25f;
-		projId = 401;
+		projId = (int)ProjIds.BusterUnpoDown;
 		vel.x = 0f;
 		vel.y = 500f;
 		if (rpc)

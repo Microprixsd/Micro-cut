@@ -12,14 +12,20 @@ namespace MMXOnline
         public BlackArrow(int altFire) : base(altFire)
         {
             shootSounds = new List<string>() { "blackArrow", "blackArrow", "blackArrow", "blackArrow" };
-            rateOfFire = 0.4f;
-            altFireCooldown = 0.8f;
+            rateOfFire = 0.2f;
+            altFireCooldown = 0.45f;
+            switchCooldown = 0.75f;
             index = (int)WeaponIds.BlackArrow;
             weaponBarBaseIndex = 33;
             weaponSlotIndex = 53;
             killFeedIndex = 68;
 
             sprite = "axl_arm_blackarrow";
+        }
+        public override void update()
+        {
+            base.update();
+            rechargeAmmo(0.25f);
         }
 
         public override float getAmmoUsage(int chargeLevel)
@@ -28,16 +34,16 @@ namespace MMXOnline
             {
                 if (altFire == 1)
                 {
-                    return 6;
+                    return 9;
                 }
-                return 4;
+                return 6;
             }
-            return 2;
+            return 3;
         }
 
         public override float whiteAxlFireRateMod()
         {
-            return 2f;
+            return 1.5f;
         }
 
         public override void axlGetProjectile(Weapon weapon, Point bulletPos, int xDir, Player player, float angle, IDamagable target, Character headshotTarget, Point cursorPos, int chargeLevel, ushort netId)
@@ -59,8 +65,8 @@ namespace MMXOnline
                 else
                 {
                     new BlackArrowProj(weapon, bulletPos, player, bulletDir, 1, netId, rpc: true);
-                    new BlackArrowProj(weapon, bulletPos, player, Point.createFromAngle(angle - 30), 1, player.getNextActorNetId(), rpc: true);
-                    new BlackArrowProj(weapon, bulletPos, player, Point.createFromAngle(angle + 30), 1, player.getNextActorNetId(), rpc: true);
+                    new BlackArrowProj(weapon, bulletPos, player, Point.createFromAngle(angle - 25), 1, player.getNextActorNetId(), rpc: true);
+                    new BlackArrowProj(weapon, bulletPos, player, Point.createFromAngle(angle + 25), 1, player.getNextActorNetId(), rpc: true);
                 }
             }
 
@@ -80,7 +86,7 @@ namespace MMXOnline
         public BlackArrowProj(Weapon weapon, Point pos, Player player, Point bulletDir, int type, ushort netProjId, bool rpc = false) :
             base(weapon, pos, 1, 450, 1, player, "blackarrow_proj", 0, 0f, netProjId, player.ownedByLocalPlayer)
         {
-            maxTime = 0.5f;
+            maxTime = 0.45f;
             vel.x = bulletDir.x * speed;
             vel.y = bulletDir.y * speed;
             this.type = type;
@@ -140,8 +146,9 @@ namespace MMXOnline
 
                 if (getHeadshotVictim(owner, out IDamagable victim, out Point? hitPoint))
                 {
-                    damager.applyDamage(victim, false, weapon, this, projId, overrideDamage: damager.damage * Damager.headshotModifier);
+                    damager.applyDamage(victim, false, weapon, this, projId, overrideDamage: damager.damage);
                     damager.damage = 0;
+                    damager.flinch = Global.miniFlinch;
                     playSound("hurt");
                     destroySelf();
                     return;
@@ -158,10 +165,10 @@ namespace MMXOnline
             if (type != 2)
             {
                 useGravity = false;
-                maxTime = 4;
+                maxTime = 1;
                 if (owner.character?.isWhiteAxl() == true)
                 {
-                    maxTime = 10;
+                    maxTime = 3;
                 }
                 time = 0;
                 type = 2;
@@ -198,9 +205,9 @@ namespace MMXOnline
         public float turnDir = 1;
         public bool targetHit;
         public WindCutterProj(Weapon weapon, Point pos, Player player, Point bulletDir, ushort netProjId, bool rpc = false) :
-            base(weapon, pos, 1, 450, 2, player, "windcutter_proj", 0, 0.5f, netProjId, player.ownedByLocalPlayer)
+            base(weapon, pos, 1, 450, 3, player, "windcutter_proj", 0, 0.2f, netProjId, player.ownedByLocalPlayer)
         {
-            maxTime = 1f;
+            maxTime = 1.4f;
             vel.x = bulletDir.x * speed;
             vel.y = bulletDir.y * speed;
             projId = (int)ProjIds.WindCutter;
@@ -322,7 +329,7 @@ namespace MMXOnline
                 destroySelf();
                 if (owner.weapon is BlackArrow)
                 {
-                    owner.weapon.ammo += 2;
+                    owner.weapon.ammo += 4;
                 }
             }
         }

@@ -683,7 +683,7 @@ public class XUPPunchChargedState : CharState
 
     public class UPGrabbed : CharState
     {
-        public const float maxGrabTime = 10;
+        public const float maxGrabTime = 4;
         public Character grabber;
         public long savedZIndex;
         public UPGrabbed(Character grabber) : base("grabbed")
@@ -709,7 +709,7 @@ public class XUPPunchChargedState : CharState
         public override void onExit(CharState newState)
         {
             base.onExit(newState);
-            character.grabInvulnTime = 1.7f;
+            character.grabInvulnTime = 2f;
             character.setzIndex(savedZIndex);
         }
 
@@ -898,6 +898,10 @@ public class XUPPunchChargedState : CharState
             {
                 drLightAnim.frameSpeed = 0;
                 drLightAnim.frameIndex = 0;
+            }
+            if (stateTime > 8.5f)
+            {
+                character.changeState(new XRevive(), true);
             }
             
         }
