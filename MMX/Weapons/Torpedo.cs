@@ -17,12 +17,12 @@ namespace MMXOnline
             weaponSlotIndex = 1;
             weaknessIndex = 3;
             shootSounds = new List<string>() { "torpedo", "torpedo", "torpedo", "buster3" };
-            rateOfFire = 0.625f;
+            rateOfFire = 0.75f;
         }
 
         public override float getAmmoUsage(int chargeLevel)
         {
-            if (chargeLevel < 3) return 2;
+            if (chargeLevel < 3) return 1;
             return base.getAmmoUsage(chargeLevel);
         }
 

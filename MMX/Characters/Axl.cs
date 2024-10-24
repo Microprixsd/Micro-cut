@@ -74,7 +74,7 @@ namespace MMXOnline
         public bool disguiseCoverBlown;
         public bool hyperAxlUsed;
         public ShaderWrapper axlPaletteShader;
-        public float maxHyperAxlTime = 108;
+        public float maxHyperAxlTime = 18;
         public List<int> ammoUsages = new List<int>();
 
         // Used to be 0.5, 100
