@@ -252,11 +252,11 @@ namespace MMXOnline
         {
             get
             {
-                return charHeartTanks[isDisguisedAxl ? 3 : charNum];
+                return charHeartTanks[isDisguisedAxl ? charNum : charNum];
             }
             set
             {
-                charHeartTanks[isDisguisedAxl ? 3 : charNum] = value;
+                charHeartTanks[isDisguisedAxl ? charNum : charNum] = value;
             }
         }
 

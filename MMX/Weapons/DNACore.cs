@@ -55,7 +55,11 @@ namespace MMXOnline
                 armorFlag = character.player.armorFlag;
                 frozenCastle = character.isFrozenCastleActiveBS.getValue();
                 speedDevil = character.isSpeedDevilActiveBS.getValue();
-                if (charNum == 0) weapons = loadout.xLoadout.getWeaponsFromLoadout(character.player);
+                if (charNum == 0) 
+                {
+                    weapons = loadout.xLoadout.getWeaponsFromLoadout(character.player);
+                    weapons.RemoveAll(w => w is NovaStrike);
+                }
                 if (charNum == 1)
                 {
                     rakuhouhaAmmo = character.player.zeroGigaAttackWeapon.ammo -16;
