@@ -584,7 +584,7 @@ namespace MMXOnline
 
 				if (player.input.isHeld(Control.Special2, player) &&
 					player.scrap >= 10 && (!(charState is HyperAxlStart)) &&
-					(!hyperAxlUsed) && (!(charState is WarpIn))
+					(!hyperAxlUsed) && invulnTime == 0 && (!(charState is WarpIn))
 				) {
 					hyperProgress += Global.spf;
 				} else {

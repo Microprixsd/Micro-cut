@@ -19,8 +19,8 @@ namespace MMXOnline
             weaponBarIndex = 31;
             weaponSlotIndex = 36;
             shootSounds = new List<string>() { "buster4", "buster4", "buster4", "buster4" };
-            rateOfFire = 2.4f;
-            switchCooldown = 0.25f;
+            rateOfFire = 2.3f;
+            switchCooldown = 0.2f;
             ammo = 0;
         }
 

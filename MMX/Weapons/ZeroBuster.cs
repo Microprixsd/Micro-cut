@@ -47,9 +47,9 @@ namespace MMXOnline
     {
         public Actor target;
         public ShingetsurinProj(Weapon weapon, Point pos, int xDir, float startTime, Player player, ushort netProjId, bool rpc = false) :
-            base(weapon, pos, xDir, 200, 2, player, "shingetsurin_proj", Global.defFlinch, 1.2f, netProjId, player.ownedByLocalPlayer)
+            base(weapon, pos, xDir, 150, 2, player, "shingetsurin_proj", Global.halfFlinch, 1.15f, netProjId, player.ownedByLocalPlayer)
         {
-            maxTime = 3f;
+            maxTime = 3.5f;
             destroyOnHit = false;
             time = startTime;
             //vel.x *= (1 - startTime);

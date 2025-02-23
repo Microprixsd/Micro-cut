@@ -163,12 +163,12 @@ namespace MMXOnline
             // Handles Standard Hypermode Activations.
 		if (player.scrap >= Player.zeroHyperCost &&
 			player.input.isHeld(Control.Special2, player) &&
-			charState is not HyperZeroStart && (
+			charState is not HyperZeroStart && invulnTime == 0 && (
 				!isNightmareZero &&
 				!isAwakenedZero() &&
 				!isBlackZero() &&
 				!isBlackZero2()
-			) && !(charState is WarpIn)
+			) && (!hyperZeroUsed) && !(charState is WarpIn)
 		) {
 			if (!player.isZBusterZero()) {
 				hyperProgress += Global.spf;
@@ -176,7 +176,7 @@ namespace MMXOnline
 		} else {
 			hyperProgress = 0;
 		}
-		if (hyperProgress >= 1 && player.scrap >= Player.zeroHyperCost) {
+		if (hyperProgress >= 1 && player.scrap >= Player.zeroHyperCost && !isBlackZero()) {
 			hyperProgress = 0;
 			changeState(new HyperZeroStart(player.zeroHyperMode), true);
 		}
