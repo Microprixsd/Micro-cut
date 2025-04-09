@@ -355,16 +355,16 @@ namespace MMXOnline
                         float chargeTime = player.character.chargeTime;
                         if (chargeTime < 1)
                         {
-                            ammoUsage = Global.spf * 6;
+                            ammoUsage = Global.spf * 12;
                         }
                         else
                         {
-                            ammoUsage = Global.spf * 6;
+                            ammoUsage = Global.spf * 12;
                         }
                     }
                     else
                     {
-                        ammoUsage = 8;
+                        ammoUsage = 16;
                     }
                 }
                 else if (this is Buster buster)

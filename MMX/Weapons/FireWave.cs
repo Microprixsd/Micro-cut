@@ -21,6 +21,24 @@ namespace MMXOnline
             isStream = true;
             switchCooldown = 0.25f;
         }
+        public override float getAmmoUsage(int chargeLevel)
+        {
+            if (chargeLevel != 3) return 2;
+            return 16;
+        }
+        public override void update()
+        {
+            base.update();
+            if (shootTime <= 0)
+            {
+            rechargeAmmo(0.28f);
+            }
+        }
+        public override bool canShoot(int chargeLevel, Player player)
+        {
+            float requiredAmmo = getAmmoUsage(chargeLevel);
+            return player.weapon.ammo >= requiredAmmo && shootTime == 0;
+        }
 
         public override void getProjectile(Point pos, int xDir, Player player, float chargeLevel, ushort netProjId)
         {

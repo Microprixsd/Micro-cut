@@ -114,6 +114,10 @@ namespace MMXOnline
             {
                 window.SetFramerateLimit((uint)options.maxFPS);
             }
+             else
+            {
+                window.SetFramerateLimit((uint)options.maxFPS);
+            }
 
             window.SetActive();
         }
